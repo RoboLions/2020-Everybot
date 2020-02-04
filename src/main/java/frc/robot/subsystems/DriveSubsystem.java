@@ -7,28 +7,45 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import frc.robot.RobotMap;
 import frc.robot.commands.JoystickDrive;
+import frc.robot.lib.RoboLionsPID;
 
 public class DriveSubsystem extends SubsystemBase {
     public static final double kMaxSpeed = 3.0; // 3.0; // meters per second
     public static final double kMaxAngularSpeed = 2 * Math.PI; // 2 * Math.PI; // one rotation per second
-
-    private static final double kTrackWidth = 0.381 * 2; // TODO find this, and what it represents
-    private static final double kWheelRadius = 0.0635; // in meters, equal to 0.25 inches
-    // private static final int kEncoderResolution = 2048; // Falcon 500 has 2048 CPR Encoders
+    private static final double IN_TO_M = .0254;
     
+    /* Dev Bot Variables */
     private static final int timeoutMs = 10;
-    private static final int kEncoderResolution = 4096; //4096 for CTRE Mag Encoders
-    private static final double DIAMETER_INCHES = 5.0; // inches
-	private static final double IN_TO_M = .0254;
-	private static final double WHEEL_DIAMETER_2020 = DIAMETER_INCHES * IN_TO_M; // in meters
-	private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_2020 * Math.PI;
-	private static final double TICKS_PER_METER = kEncoderResolution / WHEEL_CIRCUMFERENCE;
-	private static final double METERS_PER_TICKS = 1 / TICKS_PER_METER;
+    private static final int MOTOR_ENCODER_CODES_PER_REV = 4096; //4096 for CTRE Mag Encoders
+    private static final double DIAMETER_INCHES = 6.0; // dev bot, inches
+    private static final double kTrackWidth = 0.35 * 2; 
+    private static final double kWheelRadius = 2.5 * IN_TO_M; // in meters, equal to 0.25 inches
 
+    /* Poomba dev variables
+    public static final int MOTOR_ENCODER_CODES_PER_REV = 4096;  //4096 for CTRE Mag Encoders
+    public static final double DIAMETER_INCHES = 6.0;//2019 6 // 2018 10 // bot 2 = 7.5 poomba, inches
+    public static final double WHEEL_DIAMETER_2019 = DIAMETER_INCHES * IN_TO_M; // in meters
+    */
+
+    /* Everybot variables 
+    private static final int MOTOR_ENCODER_CODES_PER_REV = 2048; // Falcon 500 has 2048 CPR Encoders
+    private static final double DIAMETER_INCHES = 5.0; // Everybot, inches
+    */
+    
+	private static final double WHEEL_DIAMETER = DIAMETER_INCHES * IN_TO_M; // in meters
+	private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+	private static final double TICKS_PER_METER = MOTOR_ENCODER_CODES_PER_REV / WHEEL_CIRCUMFERENCE;
+    private static final double METERS_PER_TICKS = 1 / TICKS_PER_METER;
+    
     private static final WPI_TalonSRX leftMotorFront = RobotMap.leftMotorFront;
     private static final WPI_TalonSRX leftMotorBack = RobotMap.leftMotorBack;
     private static final WPI_TalonSRX rightMotorFront = RobotMap.rightMotorFront;
@@ -40,6 +57,21 @@ public class DriveSubsystem extends SubsystemBase {
     private static final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(rightMotorFront, rightMotorBack);
 
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftGroup, m_rightGroup);
+
+    private final PIDController m_leftPIDController = new PIDController(1, 0, 0); // need to tune
+    private final PIDController m_rightPIDController = new PIDController(1, 0, 0); // need to tune
+
+    private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
+
+    // Gains are for example purposes only - must be determined for your own robot!
+    // private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(1, 3); // need to tune
+    public SimpleMotorFeedforward m_leftFeedForward;
+    public SimpleMotorFeedforward m_rightFeedForward;
+
+    public RoboLionsPID leftForwardPID = new RoboLionsPID();
+    public RoboLionsPID rightForwardPID = new RoboLionsPID();
+	public RoboLionsPID headingPID = new RoboLionsPID();
+	public RoboLionsPID limelightPID = new RoboLionsPID();
 
     public DriveSubsystem() {
         ZeroYaw();
@@ -60,15 +92,47 @@ public class DriveSubsystem extends SubsystemBase {
         m_leftGroup.setInverted(true);
     }
 
+            /**
+     * Returns the angle of the robot as a Rotation2d.
+     *
+     * @return The angle of the robot.
+     */
+    public Rotation2d getAngle() {
+        return Rotation2d.fromDegrees(getYaw());
+    }
+
+    /**
+     * Sets the desired wheel speeds.
+     *
+     * @param speeds The desired wheel speeds.
+     */
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        /*
+        // computing voltage command to send to Talons based on the setpoint speed ie. how fast we want to go
+        final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
+        final double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
+
+        final double leftOutput = m_leftPIDController.calculate(getLeftEncoderVelocity(), speeds.leftMetersPerSecond);
+        final double rightOutput = m_rightPIDController.calculate(getRightEncoderVelocity(), speeds.rightMetersPerSecond);
+        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
+        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+        */
+
+        final double leftFeedforward = m_leftFeedForward.calculate(speeds.leftMetersPerSecond);
+        final double rightFeedforward = m_rightFeedForward.calculate(speeds.rightMetersPerSecond);
+
+        double leftOutput = leftForwardPID.execute(speeds.leftMetersPerSecond, getLeftEncoderVelocityMetersPerSecond());
+        double rightOutput = rightForwardPID.execute(speeds.rightMetersPerSecond, getRightEncoderVelocityMetersPerSecond());
+        // m_leftGroup.setVoltage(leftOutput + leftFeedforward);
+        // m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+        // m_leftGroup.setVoltage(JoystickDrive.throttle);
+        // m_rightGroup.setVoltage(JoystickDrive.throttle);
+
+        System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
+    }
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Yaw", getYaw());
-        SmartDashboard.putNumber("Pitch", getPitch());
-        SmartDashboard.putNumber("Roll", getRoll());
-        SmartDashboard.putNumber("Left Position", getLeftEncoderPosition());
-        SmartDashboard.putNumber("Right Position", getRightEncoderPosition());
-        SmartDashboard.putNumber("Left Velocity", getLeftEncoderVelocity());
-        SmartDashboard.putNumber("Right Velocity", getRightEncoderVelocity());
 
     }
 

@@ -8,10 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
+import frc.robot.commands.JoystickDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,6 +29,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private RobotContainer m_robotContainer;
 
+  private int tempBool = 0;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -37,6 +41,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    RobotContainer.driveSubsystem.setModeVoltage();
   }
 
   /**
@@ -50,19 +55,21 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    tempBool++;
+    if (tempBool == 5) {
+      tempBool = 0;
+      SmartDashboard.putNumber("Yaw", m_robotContainer.driveSubsystem.getYaw());
+      SmartDashboard.putNumber("Pitch", m_robotContainer.driveSubsystem.getPitch());
+      SmartDashboard.putNumber("Roll", m_robotContainer.driveSubsystem.getRoll());
+      SmartDashboard.putNumber("Left Position", m_robotContainer.driveSubsystem.getLeftEncoderPosition());
+      SmartDashboard.putNumber("Right Position", m_robotContainer.driveSubsystem.getRightEncoderPosition());
+      SmartDashboard.putNumber("Left Velocity", m_robotContainer.driveSubsystem.getLeftEncoderVelocity());
+      SmartDashboard.putNumber("Right Velocity", m_robotContainer.driveSubsystem.getRightEncoderVelocity());
+
+      SmartDashboard.putNumber("Throttle: ", JoystickDrive.throttle);
+    }
   }
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
-   */
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
@@ -91,6 +98,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    System.out.println(RobotContainer.driverController.getY(Hand.kLeft));
   }
 
   /**

@@ -3,16 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
 
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.DriveSubsystem;
-
-import static edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -22,7 +16,7 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
  */
 public class RobotContainer {
     // The robot's subsystems
-    private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+    public static DriveSubsystem driveSubsystem = new DriveSubsystem();
 
     // The driver's controller
     public static XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
