@@ -8,12 +8,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.lib.RoboLionsPID;
@@ -90,6 +92,24 @@ public class DriveSubsystem extends SubsystemBase {
 		rightMotorBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         
         m_leftGroup.setInverted(true);
+
+        leftForwardPID.initialize(
+        2, // Proportional Gain
+        0.3, // Integral Gain 0.0018
+        0, // Derivative Gain
+        0, // Cage Limit //0.3
+        0, // Deadband
+        12// MaxOutput //0.25
+        );
+
+        rightForwardPID.initialize(
+        0.3, // Proportional Gain
+        0.1, // Integral Gain 0.0018
+        0, // Derivative Gain
+        0, // Cage Limit //0.3
+        0, // Deadband
+        12// MaxOutput //0.25
+        );
     }
 
             /**
@@ -123,13 +143,54 @@ public class DriveSubsystem extends SubsystemBase {
 
         double leftOutput = leftForwardPID.execute(speeds.leftMetersPerSecond, getLeftEncoderVelocityMetersPerSecond());
         double rightOutput = rightForwardPID.execute(speeds.rightMetersPerSecond, getRightEncoderVelocityMetersPerSecond());
-        // m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        // m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
+        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
         // m_leftGroup.setVoltage(JoystickDrive.throttle);
         // m_rightGroup.setVoltage(JoystickDrive.throttle);
 
         System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
     }
+
+  public double calculateNew(double velocity, double acceleration, double ks, double kv, double ka) {
+    return ks * Math.signum(velocity) + kv * velocity + ka * acceleration;
+  }
+
+    public void setSpeedsNew(double leftSpeed, double rightSpeed) {
+        /*
+        // computing voltage command to send to Talons based on the setpoint speed ie. how fast we want to go
+        final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
+        final double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
+
+        final double leftOutput = m_leftPIDController.calculate(getLeftEncoderVelocity(), speeds.leftMetersPerSecond);
+        final double rightOutput = m_rightPIDController.calculate(getRightEncoderVelocity(), speeds.rightMetersPerSecond);
+        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
+        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+        */
+    
+        final double leftFeedforward = calculateNew(leftSpeed, 0, 1, 2.6, 0);
+        final double rightFeedforward = calculateNew(rightSpeed, 0, 1.2, 2.6, 0);
+
+        double leftOutput = leftForwardPID.execute(leftSpeed, getLeftEncoderVelocityMetersPerSecond());
+        double rightOutput = rightForwardPID.execute(rightSpeed, getRightEncoderVelocityMetersPerSecond());
+        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
+        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+        // m_leftGroup.setVoltage(JoystickDrive.throttle);
+        // m_rightGroup.setVoltage(JoystickDrive.throttle);
+
+        // System.out.println("Hello World!");
+        System.out.println("LFF " + leftFeedforward + "LPD" + leftOutput + "RFF " + rightFeedforward + "RPD" + rightOutput);
+        // System.out.println("Left V: " + getLeftEncoderVelocityMetersPerSecond() + "/ Right V:" + getRightEncoderVelocityMetersPerSecond());
+        // System.out.println("Left Error: " + (leftSpeed-getLeftEncoderVelocityMetersPerSecond()) + "/ Right Error: " + (getRightEncoderVelocityMetersPerSecond()-rightSpeed));
+        // System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
+    }
+
+    /*
+    @SuppressWarnings("ParameterName")
+        public void drive(double xSpeed, double rot) {
+        var wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+        setSpeeds(wheelSpeeds);
+    }
+    */
 
     @Override
     public void periodic() {
@@ -194,7 +255,7 @@ public class DriveSubsystem extends SubsystemBase {
     
     public double getLeftEncoderVelocityMetersPerSecond() {
         //getQuadVelocity is in 100 ms so we have to divide it by 10 to get seconds
-        double leftVelocityMPS = (leftMotorFront.getSelectedSensorVelocity()/10); 
+        double leftVelocityMPS = (leftMotorFront.getSelectedSensorVelocity()*10); // /10
         // since getQuadVelocity is in encoders, we have to convert it to meters
         leftVelocityMPS = leftVelocityMPS * METERS_PER_TICKS;
         return (leftVelocityMPS);
@@ -202,7 +263,7 @@ public class DriveSubsystem extends SubsystemBase {
     
     public double getRightEncoderVelocityMetersPerSecond() {
         //getQuadVelocity is in 100 ms so we have to divide it by 10 to get seconds
-        double rightVelocityMPS = (rightMotorFront.getSelectedSensorVelocity()/10); 
+        double rightVelocityMPS = (rightMotorFront.getSelectedSensorVelocity()*10); // /10
         // since getQuadVelocity is in encoders, we have to convert it to meters
         rightVelocityMPS = rightVelocityMPS * METERS_PER_TICKS;
         return (rightVelocityMPS);
@@ -221,6 +282,10 @@ public class DriveSubsystem extends SubsystemBase {
 		rightMotorBack.setSelectedSensorPosition(0);
     }
     
+    public void driveRoboLionsPID(double throttle, double rotate) {
+        setSpeedsNew(throttle, throttle);
+    }
+
     public static void drive(double throttle, double rotate) {
         m_leftGroup.set(throttle + rotate);
         m_rightGroup.set(throttle - rotate);

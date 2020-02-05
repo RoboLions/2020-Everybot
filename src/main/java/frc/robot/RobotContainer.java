@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.JoystickDrive;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
     // The robot's subsystems
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
+    public static DifferentialDriveWheelSpeeds difWheelSpeeds = new DifferentialDriveWheelSpeeds();
 
     // The driver's controller
     public static XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);

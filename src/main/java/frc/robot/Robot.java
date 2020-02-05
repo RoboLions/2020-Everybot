@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    System.out.println(RobotContainer.driverController.getY(Hand.kLeft));
+    // System.out.println(RobotContainer.driverController.getY(Hand.kLeft));
   }
 
   /**
