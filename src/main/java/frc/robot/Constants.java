@@ -20,40 +20,23 @@ public final class Constants {
     public static int LEFT_AXIS = 0;
     public static int RIGHT_AXIS = 1;
   }
-  public static final class LimelightConstants 
-  {
-    //modes for limelight led light
-    public static double FORCE_OFF = 1;
-    public static double FORCE_BLINK = 2;
-    public static double FORCE_ON = 3;
 
-    //modes for limelight camera 
-    public static double VISION_PROCESSOR = 0;
-    public static double DRIVER_CAMERA = 1;
+  public static final class ArmConstants {
+    public static final int TIMEOUT_MS = 10;
+    public static final double kP = 1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double MAX_ENCODER_COUNTS = 4096;
+
+    public static final double TURN_TOLERANCE = 3; // 3 degrees of tolerance in the setpoint
+    public static final double SPEED_TOLERANCE = 30; // let the rate at which arm moves be 30 deg/sec
+
+    public static final double GROUND_POSITION = 20;
+    public static final double SCORE_POSITION = 30;
   }
 
-  public static final class ShooterConstants 
-  {
-    // all the below numbers are placeholders that we need real values for
-    public static final int SHOOTER_TOP_PORT = 400; // placeholder
-    public static final int SHOOTER_BOTTOM_PORT = 500; // placeholder
-
-    public static final double VOLTS = 1;
-    public static final double VOLT_SEC_PER_ROT = 2;
-    public static final double MOTOR_PIDF_PROFILE = 0;
-    public static final double MOTOR_GAIN_F = 3;
-    public static final double MOTOR_GAIN_P = 4;
-    public static final double MOTOR_GAIN_I = 5;	
-    public static final double MOTOR_GAIN_D = 6;
-    public static final double TOLERANCE_RPM = 7;
-    public static final double TARGET_RPM = 8;
-    public static final double ENCODER_DISTANCE_PER_PULSE = 9;
-    public static final double MOTOR_ENCODER_TICKS_PER_REV = 10;
-    public static final double REVS_PER_TICK = 1/MOTOR_ENCODER_TICKS_PER_REV;
-  }
-
-  public static final class ColorWheelConstants 
-  {
+  public static final class ColorWheelConstants {
     public static final double WHEEL_POWER = 0.5;
 
     public static final Color RED = new Color(0.465, 0.3803, 0.1563);

@@ -2,12 +2,19 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.Constants.OIConstants;
-
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.commands.ManualMoveArm;
 import frc.robot.commands.JoystickDrive;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.commands.MoveArmToPosition;
+import frc.robot.Constants.ArmConstants;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -18,21 +25,14 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
     // The robot's subsystems
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
+    public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    public static ArmSubsystem armSubsystem = new ArmSubsystem();
+    public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
     public static DifferentialDriveWheelSpeeds difWheelSpeeds = new DifferentialDriveWheelSpeeds();
 
     // The driver's controller
     public static XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
     public static XboxController manipulatorController = new XboxController(OIConstants.MANIPULATOR_CONTROLLER_PORT);
-
-    public static double driverYStickLeft = manipulatorController.getY(Hand.kLeft);
-    public static double driverXStickRight = manipulatorController.getX(Hand.kRight);
-    public static double driverLeftTriggerValue = driverController.getTriggerAxis(Hand.kLeft);
-    public static double driverRightTriggerValue = driverController.getTriggerAxis(Hand.kRight);
-    public static double leftAxisValue = driverController.getRawAxis(OIConstants.LEFT_AXIS);
-  
-    public static double manipulatorYStickLeft = manipulatorController.getY(Hand.kLeft);
-    public static double manipulatorLeftTriggerValue = manipulatorController.getTriggerAxis(Hand.kLeft);
-    public static double manipulatorRightTriggerValue = manipulatorController.getTriggerAxis(Hand.kRight);
     
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -44,6 +44,10 @@ public class RobotContainer {
         driveSubsystem.setDefaultCommand(
             new JoystickDrive(driveSubsystem)
         );
+
+        armSubsystem.setDefaultCommand(
+            new ManualMoveArm(armSubsystem)
+        );
     }
 
     /**
@@ -53,6 +57,34 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        // ball intake
+        new JoystickButton(manipulatorController, Button.kA.value).whileHeld(
+            new InstantCommand(intakeSubsystem::intakeBalls, intakeSubsystem)
+        );
 
-    }
+        // ball outtake
+        new JoystickButton(manipulatorController, Button.kB.value).whileHeld(
+            new InstantCommand(intakeSubsystem::outtakeBalls, intakeSubsystem)
+        );
+
+        // climb up
+        new JoystickButton(manipulatorController, Button.kBumperLeft.value).whileHeld(
+            new InstantCommand(climberSubsystem::climbUp, climberSubsystem)
+        );
+
+        // climb down
+        new JoystickButton(manipulatorController, Button.kBumperRight.value).whileHeld(
+            new InstantCommand(climberSubsystem::climbDown, climberSubsystem)
+        );
+
+        // move Arm to Intake/Ground Position
+        new JoystickButton(manipulatorController, Button.kX.value).whenPressed(
+            new MoveArmToPosition(ArmConstants.GROUND_POSITION, armSubsystem)
+        );
+
+        // move Arm to Low Goal Scoring Position
+        new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
+            new MoveArmToPosition(ArmConstants.SCORE_POSITION, armSubsystem)
+        );
+    }  
 }
