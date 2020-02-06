@@ -38,7 +38,7 @@ public class RoboLionsPID {
 
   public static int deadband_counter = 0;
 
-  // Called just before this Command runs the first time
+  // Called just before this Command runs the first time to set your values
   public void initialize(double _P,double _I, double _D,
                          double Cage_Limit,double Deadband,double MaxOutput) {
     proportionalGain = _P;
@@ -68,6 +68,8 @@ public class RoboLionsPID {
   }
 
   // Called repeatedly when this Command is scheduled to run
+  // This is the function that takes in what you told the motors to do and 
+  // what the motors actually did to create what we know as PID control
   public double execute(double command, double feedback) {
     cmd = command;
     feed = feedback;

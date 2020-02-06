@@ -31,11 +31,11 @@ public class JoystickDrive extends CommandBase {
     public void execute() {
 
         // PID Testing Joystick Inputs
-        if (driverController.getY(Hand.kLeft) > 0.2) 
+        if (driverController.getY(Hand.kLeft) > 0.1) 
         {
             throttle = 0.5;
         } 
-        else if (driverController.getY(Hand.kLeft) < -0.2) {
+        else if (driverController.getY(Hand.kLeft) < -0.1) {
             throttle = -0.5;
         }
         else {

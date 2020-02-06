@@ -178,7 +178,7 @@ public class DriveSubsystem extends SubsystemBase {
         // m_rightGroup.setVoltage(JoystickDrive.throttle);
 
         // System.out.println("Hello World!");
-        System.out.println("LFF " + leftFeedforward + "LPD" + leftOutput + "RFF " + rightFeedforward + "RPD" + rightOutput);
+        System.out.println("LFF " + leftFeedforward + " LPD " + leftOutput + " RFF " + rightFeedforward + " RPD " + rightOutput);
         // System.out.println("Left V: " + getLeftEncoderVelocityMetersPerSecond() + "/ Right V:" + getRightEncoderVelocityMetersPerSecond());
         // System.out.println("Left Error: " + (leftSpeed-getLeftEncoderVelocityMetersPerSecond()) + "/ Right Error: " + (getRightEncoderVelocityMetersPerSecond()-rightSpeed));
         // System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
@@ -256,7 +256,7 @@ public class DriveSubsystem extends SubsystemBase {
     public double getLeftEncoderVelocityMetersPerSecond() {
         //getQuadVelocity is in 100 ms so we have to divide it by 10 to get seconds
         double leftVelocityMPS = (leftMotorFront.getSelectedSensorVelocity()*10); // /10
-        // since getQuadVelocity is in encoders, we have to convert it to meters
+        // since getQuadVelocity is in encoder ticks, we have to convert it to meters
         leftVelocityMPS = leftVelocityMPS * METERS_PER_TICKS;
         return (leftVelocityMPS);
     }
@@ -264,7 +264,7 @@ public class DriveSubsystem extends SubsystemBase {
     public double getRightEncoderVelocityMetersPerSecond() {
         //getQuadVelocity is in 100 ms so we have to divide it by 10 to get seconds
         double rightVelocityMPS = (rightMotorFront.getSelectedSensorVelocity()*10); // /10
-        // since getQuadVelocity is in encoders, we have to convert it to meters
+        // since getQuadVelocity is in encoder ticks, we have to convert it to meters
         rightVelocityMPS = rightVelocityMPS * METERS_PER_TICKS;
         return (rightVelocityMPS);
     }
@@ -282,10 +282,12 @@ public class DriveSubsystem extends SubsystemBase {
 		rightMotorBack.setSelectedSensorPosition(0);
     }
     
+    // Function for deciding what variables, etc determine the speeds of the drivetrain
     public void driveRoboLionsPID(double throttle, double rotate) {
         setSpeedsNew(throttle, throttle);
     }
 
+    // Function for deciding what variables, etc determine the speeds of the drivetrain
     public static void drive(double throttle, double rotate) {
         m_leftGroup.set(throttle + rotate);
         m_rightGroup.set(throttle - rotate);
