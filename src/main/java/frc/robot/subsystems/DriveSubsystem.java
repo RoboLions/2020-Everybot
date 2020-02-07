@@ -92,23 +92,24 @@ public class DriveSubsystem extends SubsystemBase {
 		rightMotorBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         
         m_leftGroup.setInverted(true);
+        //m_rightGroup.setInverted(true);
 
         leftForwardPID.initialize(
-        2, // Proportional Gain
-        0.3, // Integral Gain 0.0018
-        0, // Derivative Gain
+        4.2, // Proportional Gain 2 7 4.2
+        14, // Integral Gain 0.0018 0.3 32.31
+        0, // Derivative Gain 0.1365
         0, // Cage Limit //0.3
         0, // Deadband
-        12// MaxOutput //0.25
+        100// MaxOutput //0.25
         );
 
         rightForwardPID.initialize(
-        0.3, // Proportional Gain
-        0.1, // Integral Gain 0.0018
-        0, // Derivative Gain
+        4.2, // Proportional Gain 0.3 7 4.2
+        14, // Integral Gain 0.0018 0.1 38
+        0, // Derivative Gain  0.116
         0, // Cage Limit //0.3
         0, // Deadband
-        12// MaxOutput //0.25
+        100// MaxOutput //0.25
         );
     }
 
@@ -171,15 +172,15 @@ public class DriveSubsystem extends SubsystemBase {
         final double rightFeedforward = calculateNew(rightSpeed, 0, 1.2, 2.6, 0);
 
         double leftOutput = leftForwardPID.execute(leftSpeed, getLeftEncoderVelocityMetersPerSecond());
-        double rightOutput = rightForwardPID.execute(rightSpeed, getRightEncoderVelocityMetersPerSecond());
+        double rightOutput = rightForwardPID.execute(rightSpeed, -getRightEncoderVelocityMetersPerSecond());
         m_leftGroup.setVoltage(leftOutput + leftFeedforward);
         m_rightGroup.setVoltage(rightOutput + rightFeedforward);
         // m_leftGroup.setVoltage(JoystickDrive.throttle);
         // m_rightGroup.setVoltage(JoystickDrive.throttle);
 
         // System.out.println("Hello World!");
-        System.out.println("LFF " + leftFeedforward + " LPD " + leftOutput + " RFF " + rightFeedforward + " RPD " + rightOutput);
-        // System.out.println("Left V: " + getLeftEncoderVelocityMetersPerSecond() + "/ Right V:" + getRightEncoderVelocityMetersPerSecond());
+        //System.out.println("LFF " + leftFeedforward + " LPD " + leftOutput + " RFF " + rightFeedforward + " RPD " + rightOutput);
+        System.out.println("L: " + getLeftEncoderVelocityMetersPerSecond() + "/ R:" + getRightEncoderVelocityMetersPerSecond());
         // System.out.println("Left Error: " + (leftSpeed-getLeftEncoderVelocityMetersPerSecond()) + "/ Right Error: " + (getRightEncoderVelocityMetersPerSecond()-rightSpeed));
         // System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
     }
@@ -250,7 +251,8 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	public double getRightEncoderVelocity() {
-		return rightMotorFront.getSelectedSensorVelocity();
+        return rightMotorFront.getSelectedSensorVelocity();
+        // inverted because the encoder for dev bot is wired on backwards
     }	
     
     public double getLeftEncoderVelocityMetersPerSecond() {

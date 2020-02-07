@@ -29,19 +29,24 @@ public class JoystickDrive extends CommandBase {
 
     @Override
     public void execute() {
-
+        
+        /*
         // PID Testing Joystick Inputs
         if (driverController.getY(Hand.kLeft) > 0.1) 
         {
-            throttle = 0.5;
+            throttle = 2;
         } 
         else if (driverController.getY(Hand.kLeft) < -0.1) {
-            throttle = -0.5;
+            throttle = -2;
         }
         else {
             throttle = 0.0;
         }
         rotate = 0.0;
+        */
+
+        throttle = driverController.getY(Hand.kLeft);
+        rotate = driverController.getX(Hand.kRight);
 
         //driveSubsystem.drive(throttle, rotate);
         driveSubsystem.driveRoboLionsPID(throttle, rotate);
