@@ -53,7 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
     private static final WPI_TalonSRX rightMotorFront = RobotMap.rightMotorFront;
     private static final WPI_TalonSRX rightMotorBack = RobotMap.rightMotorBack;
 
-    private final PigeonIMU imu = RobotMap.imu;
+    private final PigeonIMU imu = RobotMap.drive_imu;
 
     private static final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(leftMotorFront, leftMotorBack);
     private static final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(rightMotorFront, rightMotorBack);

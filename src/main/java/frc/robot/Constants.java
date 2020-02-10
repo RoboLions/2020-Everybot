@@ -27,13 +27,10 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double MAX_ENCODER_COUNTS = 4096;
-
-    public static final double TURN_TOLERANCE = 3; // 3 degrees of tolerance in the setpoint
-    public static final double SPEED_TOLERANCE = 30; // let the rate at which arm moves be 30 deg/sec
-
     public static final double GROUND_POSITION = 20;
     public static final double SCORE_POSITION = 30;
+    public static final double ANOTHER_POSITION = 40;
+    public static final double YET_ANOTHER_POSITION = 50;
   }
 
   public static final class ColorWheelConstants {

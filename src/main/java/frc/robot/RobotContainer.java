@@ -13,8 +13,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.commands.MoveArmToPosition;
-import frc.robot.Constants.ArmConstants;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -75,16 +73,6 @@ public class RobotContainer {
         // climb down
         new JoystickButton(manipulatorController, Button.kBumperRight.value).whileHeld(
             new InstantCommand(climberSubsystem::climbDown, climberSubsystem)
-        );
-
-        // move Arm to Intake/Ground Position
-        new JoystickButton(manipulatorController, Button.kX.value).whenPressed(
-            new MoveArmToPosition(ArmConstants.GROUND_POSITION, armSubsystem)
-        );
-
-        // move Arm to Low Goal Scoring Position
-        new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
-            new MoveArmToPosition(ArmConstants.SCORE_POSITION, armSubsystem)
         );
     }  
 }
