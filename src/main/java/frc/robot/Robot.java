@@ -63,8 +63,8 @@ public class Robot extends TimedRobot {
       SmartDashboard.putNumber("Roll", m_robotContainer.driveSubsystem.getRoll());
       SmartDashboard.putNumber("Left Position", m_robotContainer.driveSubsystem.getLeftEncoderPosition());
       SmartDashboard.putNumber("Right Position", m_robotContainer.driveSubsystem.getRightEncoderPosition());
-      SmartDashboard.putNumber("Left Velocity", m_robotContainer.driveSubsystem.getLeftEncoderVelocity());
-      SmartDashboard.putNumber("Right Velocity", m_robotContainer.driveSubsystem.getRightEncoderVelocity());
+      SmartDashboard.putNumber("Left Velocity", m_robotContainer.driveSubsystem.getLeftEncoderVelocityMetersPerSecond());
+      SmartDashboard.putNumber("Right Velocity", m_robotContainer.driveSubsystem.getRightEncoderVelocityMetersPerSecond());
 
       SmartDashboard.putNumber("Throttle: ", JoystickDrive.throttle);
     }

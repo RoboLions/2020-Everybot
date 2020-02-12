@@ -15,6 +15,7 @@ public class ManualMoveArm extends CommandBase {
 
     public ManualMoveArm(ArmSubsystem arm) {
         armSubsystem = arm;
+        addRequirements(armSubsystem);
     }
 
     @Override

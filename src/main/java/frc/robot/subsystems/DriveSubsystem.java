@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -12,6 +13,8 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -81,32 +84,46 @@ public class DriveSubsystem extends SubsystemBase {
 
         leftMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
         leftMotorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        leftMotorFront.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        leftMotorFront.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        leftMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
         
         rightMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
         rightMotorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        rightMotorFront.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        rightMotorFront.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        rightMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
         
         leftMotorBack.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
         leftMotorBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        leftMotorBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        leftMotorBack.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        // leftMotorBack.follow(leftMotorFront);
         
         rightMotorBack.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
-		rightMotorBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        rightMotorBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        rightMotorBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        rightMotorBack.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        // rightMotorBack.follow(rightMotorFront);
+
+
         
         m_leftGroup.setInverted(true);
         //m_rightGroup.setInverted(true);
 
         leftForwardPID.initialize(
-        4.2, // Proportional Gain 2 7 4.2
-        14, // Integral Gain 0.0018 0.3 32.31
-        0, // Derivative Gain 0.1365
-        0, // Cage Limit //0.3
+        3.5, // Proportional Gain 2 / 7 / ZN 4.2 / 4.2
+        20, // Integral Gain 0.0018 / 0.3 / ZN 32.31 / 14
+        0, // Derivative Gain ZN 0.1365
+        0, // Cage Limit 0.3
         0, // Deadband
-        100// MaxOutput //0.25
+        100// MaxOutput 0.25
         );
 
         rightForwardPID.initialize(
-        4.2, // Proportional Gain 0.3 7 4.2
-        14, // Integral Gain 0.0018 0.1 38
-        0, // Derivative Gain  0.116
+        3.5, // Proportional Gain 0.3 / 7 / ZN 4.2 / 4.2
+        20, // Integral Gain 0.0018 / 0.1 / ZN 38 / 14
+        0, // Derivative Gain  ZN 0.116
         0, // Cage Limit //0.3
         0, // Deadband
         100// MaxOutput //0.25
@@ -171,16 +188,61 @@ public class DriveSubsystem extends SubsystemBase {
         final double leftFeedforward = calculateNew(leftSpeed, 0, 1, 2.6, 0);
         final double rightFeedforward = calculateNew(rightSpeed, 0, 1.2, 2.6, 0);
 
+        double batteryVoltage = RobotController.getBatteryVoltage(); // getting battery voltage from PDP via the rio
+
+        if (batteryVoltage < 1) {
+            batteryVoltage = 1;
+        }
+
+        //final double leftFeedforward = 0;
+        //final double rightFeedforward = 0;
+
         double leftOutput = leftForwardPID.execute(leftSpeed, getLeftEncoderVelocityMetersPerSecond());
-        double rightOutput = rightForwardPID.execute(rightSpeed, -getRightEncoderVelocityMetersPerSecond());
-        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+        double rightOutput = rightForwardPID.execute(rightSpeed, getRightEncoderVelocityMetersPerSecond());
+        SmartDashboard.putNumber("Left Output", leftOutput);
+        SmartDashboard.putNumber("Right Output", rightOutput);
+
+        double LVoltagePercentCommand = ((leftOutput + leftFeedforward) / batteryVoltage);
+        double RVoltagePercentCommand = ((rightOutput + rightFeedforward) / batteryVoltage);
+
+        if (LVoltagePercentCommand > 1.0) {
+            LVoltagePercentCommand = 1.0;
+        }
+        else if (LVoltagePercentCommand < -1.0) {
+            LVoltagePercentCommand = -1.0;
+        }
+
+        if (RVoltagePercentCommand > 1.0) {
+            RVoltagePercentCommand = 1.0;
+        }
+        else if (RVoltagePercentCommand < -1.0) {
+            RVoltagePercentCommand = -1.0;
+        }
+
+        SmartDashboard.putNumber("Right Motor Command", RVoltagePercentCommand);
+        SmartDashboard.putNumber("Left Motor Command", LVoltagePercentCommand);
+
+        leftMotorFront.set(-LVoltagePercentCommand);
+        leftMotorBack.set(-LVoltagePercentCommand);
+        rightMotorFront.set(RVoltagePercentCommand);
+        rightMotorBack.set(RVoltagePercentCommand);
+
+        // m_leftGroup.setVoltage(leftOutput + leftFeedforward);
+        // m_rightGroup.setVoltage(rightOutput + rightFeedforward);
         // m_leftGroup.setVoltage(JoystickDrive.throttle);
         // m_rightGroup.setVoltage(JoystickDrive.throttle);
 
         // System.out.println("Hello World!");
         //System.out.println("LFF " + leftFeedforward + " LPD " + leftOutput + " RFF " + rightFeedforward + " RPD " + rightOutput);
-        System.out.println("L: " + getLeftEncoderVelocityMetersPerSecond() + "/ R:" + getRightEncoderVelocityMetersPerSecond());
+        // There is a + for the error since right encoder velocity was already negative so -- = +
+        // System.out.println("Error L - R" + (getLeftEncoderVelocityMetersPerSecond()-getRightEncoderVelocityMetersPerSecond()));
+        SmartDashboard.putNumber("Error L - R", (getLeftEncoderVelocityMetersPerSecond()-getRightEncoderVelocityMetersPerSecond()));
+        
+        SmartDashboard.putNumber("Left Motor Front Voltage", leftMotorFront.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Left Motor Back Voltage", leftMotorBack.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Right Motor Front Voltage", rightMotorFront.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Right Motor Back Voltage", rightMotorBack.getMotorOutputVoltage());
+        // System.out.println("L: " + getLeftEncoderVelocityMetersPerSecond() + "/ R:" + getRightEncoderVelocityMetersPerSecond());
         // System.out.println("Left Error: " + (leftSpeed-getLeftEncoderVelocityMetersPerSecond()) + "/ Right Error: " + (getRightEncoderVelocityMetersPerSecond()-rightSpeed));
         // System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
     }
@@ -267,7 +329,8 @@ public class DriveSubsystem extends SubsystemBase {
         //getQuadVelocity is in 100 ms so we have to divide it by 10 to get seconds
         double rightVelocityMPS = (rightMotorFront.getSelectedSensorVelocity()*10); // /10
         // since getQuadVelocity is in encoder ticks, we have to convert it to meters
-        rightVelocityMPS = rightVelocityMPS * METERS_PER_TICKS;
+        //Need to have a negative for right velocity since the motors are reversed on the opposite side
+        rightVelocityMPS = -rightVelocityMPS * METERS_PER_TICKS;
         return (rightVelocityMPS);
     }
 
