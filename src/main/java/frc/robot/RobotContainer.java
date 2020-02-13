@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.ManualMoveArm;
+import frc.robot.commands.ManualMoveClimb;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -46,6 +47,10 @@ public class RobotContainer {
         armSubsystem.setDefaultCommand(
             new ManualMoveArm(armSubsystem)
         );
+
+        climberSubsystem.setDefaultCommand(
+            new ManualMoveClimb(climberSubsystem)
+        );
     }
 
     /**
@@ -61,18 +66,8 @@ public class RobotContainer {
         );
 
         // ball outtake
-        new JoystickButton(manipulatorController, Button.kB.value).whileHeld(
+        new JoystickButton(manipulatorController, Button.kY.value).whileHeld(
             new InstantCommand(intakeSubsystem::outtakeBalls, intakeSubsystem)
-        );
-
-        // climb up
-        new JoystickButton(manipulatorController, Button.kBumperLeft.value).whileHeld(
-            new InstantCommand(climberSubsystem::climbUp, climberSubsystem)
-        );
-
-        // climb down
-        new JoystickButton(manipulatorController, Button.kBumperRight.value).whileHeld(
-            new InstantCommand(climberSubsystem::climbDown, climberSubsystem)
         );
     }  
 }

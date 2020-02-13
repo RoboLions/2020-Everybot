@@ -29,8 +29,18 @@ public final class Constants {
 
     public static final double GROUND_POSITION = 20;
     public static final double SCORE_POSITION = 30;
-    public static final double ANOTHER_POSITION = 40;
-    public static final double YET_ANOTHER_POSITION = 50;
+  }
+
+  public static final class ClimbConstants {
+    public static final int TIMEOUT_MS = 10;
+    public static final double kP = 1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double COLOR_WHEEL_POSITION = 20;
+    public static final double MAX_POSITION = 30;
+    public static final double READY_POSITION = 40;
+    public static final double DOWN_POSITION = 0;
   }
 
   public static final class ColorWheelConstants {

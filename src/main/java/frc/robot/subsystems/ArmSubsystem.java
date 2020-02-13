@@ -39,14 +39,6 @@ public class ArmSubsystem extends SubsystemBase {
         moveArmToPosition(ArmConstants.SCORE_POSITION);
     }
 
-    public void setArmToAnother() {
-        moveArmToPosition(ArmConstants.ANOTHER_POSITION);
-    }
-
-    public void setArmToYetAnother() {
-        moveArmToPosition(ArmConstants.YET_ANOTHER_POSITION);
-    }
-
     public void setArmPower(double power) {
         armMotor.set(power);
     }

@@ -25,14 +25,10 @@ public class ManualMoveArm extends CommandBase {
     @Override
     public void execute() {
         double armPower = driverController.getY(Hand.kLeft);
-        boolean x = driverController.getXButton();
-        // x = ground
-        boolean b = driverController.getBButton();
-        // b = another
-        boolean a = driverController.getAButton();
-        // a = score
-        boolean y = driverController.getYButton();
-        // y = yet another
+        boolean left_trigger = driverController.getTriggerAxis(Hand.kLeft) > 0.1;
+        // left trigger = ground
+        boolean right_trigger = driverController.getTriggerAxis(Hand.kRight) > 0.1;
+        // right trigger = score
 
         switch(wrist_motion_state) {
             case 0:
@@ -43,17 +39,11 @@ public class ManualMoveArm extends CommandBase {
                 if(armSubsystem.armPID.deadband_active) {
                     wrist_motion_state = 0;
                 }
-                if(x) {
+                if(left_trigger) {
                     wrist_motion_state = 1;
                 }
-                if(b) {
+                if(right_trigger) {
                     wrist_motion_state = 2;
-                }
-                if(a) {
-                    wrist_motion_state = 3;
-                }
-                if(y) {
-                    wrist_motion_state = 4;
                 }
                 break;
             case 1:
@@ -64,25 +54,11 @@ public class ManualMoveArm extends CommandBase {
                 }                
                 break;
             case 2:
-            // another
-                armSubsystem.setArmToAnother();
-                if(armSubsystem.armPID.deadband_active) {
-                    wrist_motion_state = 0;
-                }                
-                break;
-            case 3:
             // score
                 armSubsystem.setArmToScore();
                 if(armSubsystem.armPID.deadband_active) {
                     wrist_motion_state = 0;
-                }
-                break;
-            case 4:
-            // yet another
-                armSubsystem.setArmToYetAnother();
-                if(armSubsystem.armPID.deadband_active) {
-                    wrist_motion_state = 0;
-                }
+                }                
                 break;
             default:
                 wrist_motion_state = 0;
