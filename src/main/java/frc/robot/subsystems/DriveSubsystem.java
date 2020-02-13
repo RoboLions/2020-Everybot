@@ -113,7 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         leftForwardPID.initialize(
         3.5, // Proportional Gain 2 / 7 / ZN 4.2 / 4.2
-        20, // Integral Gain 0.0018 / 0.3 / ZN 32.31 / 14
+        25, // Integral Gain 0.0018 / 0.3 / ZN 32.31 / 14
         0, // Derivative Gain ZN 0.1365
         0, // Cage Limit 0.3
         0, // Deadband
@@ -122,7 +122,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         rightForwardPID.initialize(
         3.5, // Proportional Gain 0.3 / 7 / ZN 4.2 / 4.2
-        20, // Integral Gain 0.0018 / 0.1 / ZN 38 / 14
+        30, // Integral Gain 0.0018 / 0.1 / ZN 38 / 14
         0, // Derivative Gain  ZN 0.116
         0, // Cage Limit //0.3
         0, // Deadband
@@ -173,7 +173,7 @@ public class DriveSubsystem extends SubsystemBase {
     return ks * Math.signum(velocity) + kv * velocity + ka * acceleration;
   }
 
-    public void setSpeedsNew(double leftSpeed, double rightSpeed) {
+    public void straightDrive(double leftSpeed, double rightSpeed) {
         /*
         // computing voltage command to send to Talons based on the setpoint speed ie. how fast we want to go
         final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
@@ -245,6 +245,55 @@ public class DriveSubsystem extends SubsystemBase {
         // System.out.println("L: " + getLeftEncoderVelocityMetersPerSecond() + "/ R:" + getRightEncoderVelocityMetersPerSecond());
         // System.out.println("Left Error: " + (leftSpeed-getLeftEncoderVelocityMetersPerSecond()) + "/ Right Error: " + (getRightEncoderVelocityMetersPerSecond()-rightSpeed));
         // System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
+    }
+
+    public void driveWithRotation(double speed, double rotate) {
+        final double leftFeedforward = calculateNew(speed, 0, 1, 2.6, 0);
+        final double rightFeedforward = calculateNew(speed, 0, 1.2, 2.6, 0);
+
+        double batteryVoltage = RobotController.getBatteryVoltage(); // getting battery voltage from PDP via the rio
+
+        if (batteryVoltage < 1) {
+            batteryVoltage = 1;
+        }
+
+        //final double leftFeedforward = 0;
+        //final double rightFeedforward = 0;
+
+        double leftOutput = leftForwardPID.execute(speed, getLeftEncoderVelocityMetersPerSecond());
+        double rightOutput = rightForwardPID.execute(speed, getRightEncoderVelocityMetersPerSecond());
+        SmartDashboard.putNumber("Left Output", leftOutput);
+        SmartDashboard.putNumber("Right Output", rightOutput);
+
+        double LVoltagePercentCommand = ((leftOutput + leftFeedforward) / batteryVoltage);
+        double RVoltagePercentCommand = ((rightOutput + rightFeedforward) / batteryVoltage);
+
+        if (LVoltagePercentCommand > 1.0) {
+            LVoltagePercentCommand = 1.0;
+        }
+        else if (LVoltagePercentCommand < -1.0) {
+            LVoltagePercentCommand = -1.0;
+        }
+
+        if (RVoltagePercentCommand > 1.0) {
+            RVoltagePercentCommand = 1.0;
+        }
+        else if (RVoltagePercentCommand < -1.0) {
+            RVoltagePercentCommand = -1.0;
+        }
+
+        SmartDashboard.putNumber("Right Motor Command", RVoltagePercentCommand);
+        SmartDashboard.putNumber("Left Motor Command", LVoltagePercentCommand);
+
+        SmartDashboard.putNumber("throttle", speed);
+        SmartDashboard.putNumber("rotate", rotate);
+
+        leftMotorFront.set(-LVoltagePercentCommand - rotate);
+        leftMotorBack.set(-LVoltagePercentCommand - rotate);
+        rightMotorFront.set(RVoltagePercentCommand - rotate);
+        rightMotorBack.set(RVoltagePercentCommand - rotate);
+
+        SmartDashboard.putNumber("Error L - R", (getLeftEncoderVelocityMetersPerSecond()-getRightEncoderVelocityMetersPerSecond()));
     }
 
     /*
@@ -349,7 +398,7 @@ public class DriveSubsystem extends SubsystemBase {
     
     // Function for deciding what variables, etc determine the speeds of the drivetrain
     public void driveRoboLionsPID(double throttle, double rotate) {
-        setSpeedsNew(throttle, throttle);
+        driveWithRotation(throttle, rotate);
     }
 
     // Function for deciding what variables, etc determine the speeds of the drivetrain
