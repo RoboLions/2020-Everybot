@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ManualMoveArm extends CommandBase {
-    public static double ARM_POWER = 0.6;
+    public static double ARM_POWER = 0.2; //TODO test value
     private final ArmSubsystem armSubsystem;
     private final XboxController driverController = RobotContainer.manipulatorController;
 

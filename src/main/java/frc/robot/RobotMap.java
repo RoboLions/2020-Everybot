@@ -13,8 +13,9 @@ public class RobotMap {
 
     public static final int INTAKE_PORT = 10; // placeholder
     public static final int ARM_PORT = 11; // placeholder
-    public static final int CLIMBER_PORT = 12; // placeholder
     public static final int ARM_IMU_PORT = 13; // placeholder
+    public static final int CLIMBER_PORT = 12; // placeholder
+    public static final int WINCH_PORT = 14; // placeholder
     
     /************************************************************************************************************/
 
@@ -34,4 +35,6 @@ public class RobotMap {
     public static PigeonIMU arm_imu = new PigeonIMU(ARM_IMU_PORT);
 
     public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(CLIMBER_PORT);
+
+    public static WPI_TalonSRX winchMotor = new WPI_TalonSRX(WINCH_PORT);
 }

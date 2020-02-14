@@ -7,6 +7,8 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
@@ -108,7 +110,19 @@ public class DriveSubsystem extends SubsystemBase {
         rightMotorBack.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
         // rightMotorBack.follow(rightMotorFront);
 
+		leftMotorFront.setNeutralMode(NeutralMode.Coast);
+		leftMotorBack.setNeutralMode(NeutralMode.Coast);
+		rightMotorFront.setNeutralMode(NeutralMode.Coast);
+		rightMotorBack.setNeutralMode(NeutralMode.Coast);
 
+        /**********************************************
+         *Uncomment the below code to enable brake mode
+
+		leftMotorFront.setNeutralMode(NeutralMode.Brake);
+		leftMotorBack.setNeutralMode(NeutralMode.Brake);
+		rightMotorFront.setNeutralMode(NeutralMode.Brake);
+		rightMotorBack.setNeutralMode(NeutralMode.Brake);
+        **********************************************/
         
         m_leftGroup.setInverted(true);
         //m_rightGroup.setInverted(true);

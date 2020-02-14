@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import frc.robot.Constants.ArmConstants;
@@ -16,6 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
     public double arm_pitch_readout = 0;
 
     public ArmSubsystem() {
+        armMotor.setNeutralMode(NeutralMode.Brake);
         armPID.initialize(ArmConstants.kP, // Proportional Gain
                             ArmConstants.kI, // Integral Gain
                             ArmConstants.kD, // Derivative Gain

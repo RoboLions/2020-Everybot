@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ManualMoveClimb extends CommandBase {
-    public static double POWER = 0.6;
+    public static double POWER = 0.2; //TODO test value
     private final ClimberSubsystem climberSubsystem;
     private final XboxController driverController = RobotContainer.driverController;
 

@@ -4,13 +4,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import frc.robot.lib.RoboLionsPID;
 import frc.robot.Constants.ClimbConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-    public static final double LET_OUT_POWER = 0.6; // placeholder
-    public static final double PULL_IN_POWER = -0.6; // placeholder
+    public static final double LET_OUT_POWER = 0.2; // TODO test value
+    public static final double PULL_IN_POWER = -0.2; // TODO test value
 
     private static WPI_TalonSRX climbMotor = RobotMap.climberMotor;
     public RoboLionsPID climbPID = new RoboLionsPID();
@@ -18,6 +20,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public double climb_enc_readout = 0;
 
     public ClimberSubsystem() {
+        climbMotor.setNeutralMode(NeutralMode.Brake);
         climbMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         resetEncoder();
         climbPID.initialize(ClimbConstants.kP, // Proportional Gain
