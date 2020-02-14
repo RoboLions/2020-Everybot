@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putNumber("Left Velocity", m_robotContainer.driveSubsystem.getLeftEncoderVelocityMetersPerSecond());
       SmartDashboard.putNumber("Right Velocity", m_robotContainer.driveSubsystem.getRightEncoderVelocityMetersPerSecond());
 
-      SmartDashboard.putNumber("Throttle: ", JoystickDrive.throttle);
+      SmartDashboard.putNumber("Throttle: ", JoystickDrive._throttle);
     }
   }
 

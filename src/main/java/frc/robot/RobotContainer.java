@@ -14,6 +14,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.commands.AutoMove;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -68,6 +69,11 @@ public class RobotContainer {
         // ball outtake
         new JoystickButton(manipulatorController, Button.kY.value).whileHeld(
             new InstantCommand(intakeSubsystem::outtakeBalls, intakeSubsystem)
+        );
+
+        // testing auto
+        new JoystickButton(driverController, Button.kA.value).whenPressed(
+            new AutoMove(driveSubsystem, 1.0)
         );
     }  
 }

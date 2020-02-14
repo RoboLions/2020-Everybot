@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -75,8 +76,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     public RoboLionsPID leftForwardPID = new RoboLionsPID();
     public RoboLionsPID rightForwardPID = new RoboLionsPID();
-	public RoboLionsPID headingPID = new RoboLionsPID();
-	public RoboLionsPID limelightPID = new RoboLionsPID();
+	//public RoboLionsPID headingPID = new RoboLionsPID();
+    //public RoboLionsPID limelightPID = new RoboLionsPID();
+    public RoboLionsPID positionPID = new RoboLionsPID();
 
     public DriveSubsystem() {
         ZeroYaw();
@@ -113,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         leftForwardPID.initialize(
         3.5, // Proportional Gain 2 / 7 / ZN 4.2 / 4.2
-        25, // Integral Gain 0.0018 / 0.3 / ZN 32.31 / 14
+        20, // Integral Gain 0.0018 / 0.3 / ZN 32.31 / 14
         0, // Derivative Gain ZN 0.1365
         0, // Cage Limit 0.3
         0, // Deadband
@@ -122,7 +124,16 @@ public class DriveSubsystem extends SubsystemBase {
 
         rightForwardPID.initialize(
         3.5, // Proportional Gain 0.3 / 7 / ZN 4.2 / 4.2
-        30, // Integral Gain 0.0018 / 0.1 / ZN 38 / 14
+        20, // Integral Gain 0.0018 / 0.1 / ZN 38 / 14
+        0, // Derivative Gain  ZN 0.116
+        0, // Cage Limit //0.3
+        0, // Deadband
+        100// MaxOutput //0.25
+        );
+
+        positionPID.initialize(
+        0, // Proportional Gain 0.3 / 7 / ZN 4.2 / 4.2 / 1
+        0, // Integral Gain 0.0018 / 0.1 / ZN 38 / 14
         0, // Derivative Gain  ZN 0.116
         0, // Cage Limit //0.3
         0, // Deadband
@@ -130,48 +141,9 @@ public class DriveSubsystem extends SubsystemBase {
         );
     }
 
-            /**
-     * Returns the angle of the robot as a Rotation2d.
-     *
-     * @return The angle of the robot.
-     */
-    public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(getYaw());
+    public double calculateNew(double velocity, double acceleration, double ks, double kv, double ka) {
+        return ks * Math.signum(velocity) + kv * velocity + ka * acceleration;
     }
-
-    /**
-     * Sets the desired wheel speeds.
-     *
-     * @param speeds The desired wheel speeds.
-     */
-    public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        /*
-        // computing voltage command to send to Talons based on the setpoint speed ie. how fast we want to go
-        final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
-        final double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
-
-        final double leftOutput = m_leftPIDController.calculate(getLeftEncoderVelocity(), speeds.leftMetersPerSecond);
-        final double rightOutput = m_rightPIDController.calculate(getRightEncoderVelocity(), speeds.rightMetersPerSecond);
-        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
-        */
-
-        final double leftFeedforward = m_leftFeedForward.calculate(speeds.leftMetersPerSecond);
-        final double rightFeedforward = m_rightFeedForward.calculate(speeds.rightMetersPerSecond);
-
-        double leftOutput = leftForwardPID.execute(speeds.leftMetersPerSecond, getLeftEncoderVelocityMetersPerSecond());
-        double rightOutput = rightForwardPID.execute(speeds.rightMetersPerSecond, getRightEncoderVelocityMetersPerSecond());
-        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
-        // m_leftGroup.setVoltage(JoystickDrive.throttle);
-        // m_rightGroup.setVoltage(JoystickDrive.throttle);
-
-        System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
-    }
-
-  public double calculateNew(double velocity, double acceleration, double ks, double kv, double ka) {
-    return ks * Math.signum(velocity) + kv * velocity + ka * acceleration;
-  }
 
     public void straightDrive(double leftSpeed, double rightSpeed) {
         /*
@@ -345,10 +317,10 @@ public class DriveSubsystem extends SubsystemBase {
     	imu.setFusedHeading(0, timeoutMs);
     }
 
-    public double distanceTravelled() {
+    public double distanceTravelledinTicks() {
 		return (getLeftEncoderPosition() + getRightEncoderPosition()) / 2;
-	}
-
+    }
+    
 	public double getLeftEncoderPosition() {
 		return leftMotorFront.getSelectedSensorPosition();
 	}
@@ -385,8 +357,10 @@ public class DriveSubsystem extends SubsystemBase {
 
 	public double distanceTravelledinMeters() {
 		double left_dist = getLeftEncoderPosition() * METERS_PER_TICKS;
-		double right_dist = getRightEncoderPosition() * METERS_PER_TICKS;
-		return (left_dist + right_dist) / 2;
+        double right_dist = getRightEncoderPosition() * METERS_PER_TICKS;
+        double distanceTravelled = (left_dist + right_dist) / 2;
+        SmartDashboard.putNumber("Distance Travelled M", distanceTravelled);
+		return distanceTravelled;
 	}
 
 	public void resetEncoders() {
@@ -405,6 +379,21 @@ public class DriveSubsystem extends SubsystemBase {
     public static void drive(double throttle, double rotate) {
         m_leftGroup.set(throttle + rotate);
         m_rightGroup.set(throttle - rotate);
+    }
+    
+    public void autoDrive(double distance) { // distance is in meters
+        double left_speed; 
+        double right_speed;
+
+        double position_feedback = distanceTravelledinMeters();
+
+        double output = positionPID.execute(distance, position_feedback);
+
+        left_speed = output;
+        right_speed = output;
+
+        straightDrive(left_speed, right_speed);
+        System.out.println("TD " + distance + " // DT " + position_feedback);
     }
 
     public void stop() {
