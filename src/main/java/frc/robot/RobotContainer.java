@@ -73,19 +73,20 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /*** MANIPULATOR CONTROLLER***/
         // ball intake
-        new JoystickButton(manipulatorController, Button.kA.value).whileHeld(
+        new JoystickButton(manipulatorController, Button.kA.value).whenHeld(
             new InstantCommand(intakeSubsystem::intakeBalls, intakeSubsystem)
         );
         // ball outtake
-        new JoystickButton(manipulatorController, Button.kY.value).whileHeld(
+        new JoystickButton(manipulatorController, Button.kY.value).whenHeld(
             new InstantCommand(intakeSubsystem::outtakeBalls, intakeSubsystem)
         );
 
-        /*** DRIVER CONTROLLER***/
+        /*** DRIVER CONTROLLER***
         // testing auto
         new JoystickButton(driverController, Button.kA.value).whenPressed(
             new AutoMove(driveSubsystem, 1.0)
         );
+        */
 
         // COMPLETED climber up (LB) and climber down (RB)
         // COMPLETED Winch pull in (LT) and Winch let out (RT)

@@ -21,11 +21,9 @@ public class ManualMoveWinch extends CommandBase {
   private final WinchSubsystem winchSubsystem;
   public static WPI_TalonSRX winchMotor = RobotMap.winchMotor;
 
-  private final static XboxController manipulatorController = RobotContainer.driverController;
-  public static double mLeftTriggerValue = RobotContainer.manipulatorLeftTriggerValue;
-  public static double mRightTriggerValue = RobotContainer.manipulatorRightTriggerValue;
+  private final static XboxController driverController = RobotContainer.driverController;
   
-  public static double WINCH_SCALER = RobotContainer.winchSubsystem.WINCH_POWER; // TODO test value (WINCH_POWER is in winch subsystem)
+  public static final double POWER = 0.2;
   public static final double STOP_POWER = 0.0;
 
   public ManualMoveWinch(WinchSubsystem winch) {
@@ -46,15 +44,21 @@ public class ManualMoveWinch extends CommandBase {
     * I belive it is wise to have RT to go the opposite direction
     * so that we can reset the winch back to an unwrapped position
     */
-    if(mLeftTriggerValue > 0.25 && mRightTriggerValue < 0.25) {
-      double WINCH_UP_POWER = (mLeftTriggerValue*WINCH_SCALER);
-      winchMotor.set(WINCH_UP_POWER);
-    } else if(mRightTriggerValue > 0.25  && mLeftTriggerValue < 0.25) {
-      double WINCH_DOWN_POWER = -(mRightTriggerValue*WINCH_SCALER);
-      winchMotor.set(WINCH_DOWN_POWER);
+
+    double winchPower;
+
+    boolean leftTrigger = driverController.getTriggerAxis(Hand.kLeft) > 0.25;
+    boolean rightTrigger = driverController.getTriggerAxis(Hand.kRight) > 0.25;
+
+    if(leftTrigger) {
+      winchPower = POWER;
+    } else if(rightTrigger) {
+      winchPower = -POWER;
     } else {
-      winchMotor.set(STOP_POWER);
+      winchPower = 0;
     }
+
+    winchSubsystem.setWinchPower(winchPower);
   }
 
   // Called once the command ends or is interrupted.

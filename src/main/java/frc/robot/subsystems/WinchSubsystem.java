@@ -11,13 +11,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 public class WinchSubsystem extends SubsystemBase {
-
-  public final double WINCH_POWER = 0.2; // TODO test value 
-  public static final double STOP_POWER = 0.0;
 
   WPI_TalonSRX winchMotor = RobotMap.winchMotor;
 
@@ -25,16 +21,12 @@ public class WinchSubsystem extends SubsystemBase {
     winchMotor.setNeutralMode(NeutralMode.Brake);
   }
 
-  public void winchUp() {
-    winchMotor.set(WINCH_POWER);
-  }
-
-  public void winchDown() {
-      RobotMap.armMotor.set(-WINCH_POWER);
+  public void setWinchPower(double power) {
+    winchMotor.set(power);
   }
 
   public void stop() {
-    winchMotor.set(STOP_POWER);
+    winchMotor.set(0);
   }
 
   @Override

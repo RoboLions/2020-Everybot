@@ -55,19 +55,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    tempBool++;
-    if (tempBool == 5) {
-      tempBool = 0;
-      SmartDashboard.putNumber("Yaw", m_robotContainer.driveSubsystem.getYaw());
-      SmartDashboard.putNumber("Pitch", m_robotContainer.driveSubsystem.getPitch());
-      SmartDashboard.putNumber("Roll", m_robotContainer.driveSubsystem.getRoll());
-      SmartDashboard.putNumber("Left Position", m_robotContainer.driveSubsystem.getLeftEncoderPosition());
-      SmartDashboard.putNumber("Right Position", m_robotContainer.driveSubsystem.getRightEncoderPosition());
-      SmartDashboard.putNumber("Left Velocity", m_robotContainer.driveSubsystem.getLeftEncoderVelocityMetersPerSecond());
-      SmartDashboard.putNumber("Right Velocity", m_robotContainer.driveSubsystem.getRightEncoderVelocityMetersPerSecond());
-
-      SmartDashboard.putNumber("Throttle: ", JoystickDrive._throttle);
-    }
   }
 
   @Override

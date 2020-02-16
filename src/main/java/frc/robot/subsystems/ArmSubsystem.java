@@ -42,7 +42,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmPower(double power) {
-        armMotor.set(power);
+        armMotor.set(-power);
     }
 
     public void stop() {
