@@ -7,9 +7,8 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ManualMoveArm extends CommandBase {
-    public static double ARM_POWER = 0.1; //TODO test value
     private final ArmSubsystem armSubsystem;
-    private final XboxController driverController = RobotContainer.manipulatorController;
+    private final XboxController manipulatorController = RobotContainer.manipulatorController;
 
     public static int wrist_motion_state = 0;
 
@@ -24,25 +23,22 @@ public class ManualMoveArm extends CommandBase {
 
     @Override
     public void execute() {
-        double armPower = driverController.getY(Hand.kLeft);
-        boolean left_trigger = driverController.getTriggerAxis(Hand.kLeft) > 0.1;
-        // left trigger = ground
-        boolean right_trigger = driverController.getTriggerAxis(Hand.kRight) > 0.1;
-        // right trigger = score
+        double armPower = manipulatorController.getY(Hand.kLeft);
+        boolean x = manipulatorController.getXButton();
+        // x = ground
+        boolean b = manipulatorController.getBButton();
+        // b = score
 
         switch(wrist_motion_state) {
             case 0:
-                if(armPower < 0.25 && armPower > -0.25) {
-                    armPower = 0;
-                }
                 armSubsystem.setArmPower(armPower);
                 if(armSubsystem.armPID.deadband_active) {
                     wrist_motion_state = 0;
                 }
-                if(left_trigger) {
+                if(x) {
                     wrist_motion_state = 1;
                 }
-                if(right_trigger) {
+                if(b) {
                     wrist_motion_state = 2;
                 }
                 break;
@@ -64,7 +60,8 @@ public class ManualMoveArm extends CommandBase {
                 wrist_motion_state = 0;
                 break;
         }
-        if(Math.abs(armPower) > 0.5 ) {
+        if(Math.abs(armPower) > 0.5 ) { 
+            // wakes up the arm from PID control and back to joystick control
             wrist_motion_state = 0;
         }
     }

@@ -40,11 +40,6 @@ public class ManualMoveWinch extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /* We should tell the drivers to use LT to winch up however
-    * I belive it is wise to have RT to go the opposite direction
-    * so that we can reset the winch back to an unwrapped position
-    */
-
     double winchPower;
 
     boolean leftTrigger = driverController.getTriggerAxis(Hand.kLeft) > 0.25;

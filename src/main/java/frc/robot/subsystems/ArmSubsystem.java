@@ -13,6 +13,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final WPI_TalonSRX armMotor = RobotMap.armMotor;
     public RoboLionsPID armPID = new RoboLionsPID();
     private final PigeonIMU imu = RobotMap.arm_imu;
+    public static double MAX_ARM_POWER = 0.1; // hard deadband as to what the maximum possible command is
 
     public double arm_pitch_readout = 0;
 
@@ -30,7 +31,13 @@ public class ArmSubsystem extends SubsystemBase {
     public void moveArmToPosition(double target_pitch) {
         arm_pitch_readout = getPitch();
         double arm_cmd = armPID.execute((double)target_pitch, (double)arm_pitch_readout);
-        armMotor.set(-arm_cmd); // need to invert command to close the loop
+        // add hard deadband to arm so we don't break it
+        if(arm_cmd > MAX_ARM_POWER) {
+            arm_cmd = MAX_ARM_POWER;
+        } else if(arm_cmd < -MAX_ARM_POWER) {
+            arm_cmd = -MAX_ARM_POWER;
+        }
+        armMotor.set(arm_cmd); // need to invert command to close the loop
     }
 
     public void setArmToGround() {
@@ -42,6 +49,12 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmPower(double power) {
+        // add hard deadband to arm so we don't break it
+        if(power > MAX_ARM_POWER) {
+            power = MAX_ARM_POWER;
+        } else if(power < -MAX_ARM_POWER) {
+            power = -MAX_ARM_POWER;
+        }
         armMotor.set(-power);
     }
 

@@ -7,11 +7,12 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ManualMoveClimb extends CommandBase {
-    public static double POWER = 0.2; //TODO test value
     private final ClimberSubsystem climberSubsystem;
     private final XboxController driverController = RobotContainer.driverController;
+    private double joystick_climb_motion; // describes how to climb should move based on bumpers
+    // 1 = inwards, 2 = outwards, 3 = Not Moving
 
-    public static int wrist_motion_state = 0;
+    public static int climb_motion_state = 0;
 
     public ManualMoveClimb(ClimberSubsystem climb) {
         climberSubsystem = climb;
@@ -23,18 +24,16 @@ public class ManualMoveClimb extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        double climbPower;
-        
+    public void execute() {        
         boolean left_bumper = driverController.getBumper(Hand.kLeft);
         boolean right_bumper = driverController.getBumper(Hand.kRight);
 
         if(left_bumper) {
-            climbPower = POWER;
+            joystick_climb_motion = 1; // moving inwards
         } else if(right_bumper) {
-            climbPower = -POWER;
+            joystick_climb_motion = 2; // moving outwards
         } else {
-            climbPower = 0;
+            joystick_climb_motion = 3; // not moving based on bumpers
         }
 
         boolean x = driverController.getXButton();
@@ -46,62 +45,65 @@ public class ManualMoveClimb extends CommandBase {
         boolean y = driverController.getYButton();
         // y = Ground/Zero Position
 
-        switch(wrist_motion_state) {
+        switch(climb_motion_state) {
             case 0:
-                if(climbPower < 0.25 && climbPower > -0.25) {
-                    climbPower = 0;
+                
+                if(joystick_climb_motion == 1) {
+                    climberSubsystem.moveClimbIn();
+                } else if(joystick_climb_motion == 2) {
+                    climberSubsystem.moveClimbOut();
                 }
-                climberSubsystem.setClimbPower(climbPower);
+
                 if(climberSubsystem.climbPID.deadband_active) {
-                    wrist_motion_state = 0;
+                    climb_motion_state = 0;
                 }
                 if(x) {
-                    wrist_motion_state = 1;
+                    climb_motion_state = 1;
                 }
                 if(b) {
-                    wrist_motion_state = 2;
+                    climb_motion_state = 2;
                 }
                 if(a) {
-                    wrist_motion_state = 3;
+                    climb_motion_state = 3;
                 }
                 if(y) {
-                    wrist_motion_state = 4;
+                    climb_motion_state = 4;
                 }
                 break;
             case 1:
             // Color Wheel
                 climberSubsystem.setClimbToColorWheel();
                 if(climberSubsystem.climbPID.deadband_active) {
-                    wrist_motion_state = 0;
+                    climb_motion_state = 0;
                 }                
                 break;
             case 2:
             // Max Position
                 climberSubsystem.setClimbToMax();
                 if(climberSubsystem.climbPID.deadband_active) {
-                    wrist_motion_state = 0;
+                    climb_motion_state = 0;
                 }                
                 break;
             case 3:
             // Ready to latch on
                 climberSubsystem.setClimbToReady();
                 if(climberSubsystem.climbPID.deadband_active) {
-                    wrist_motion_state = 0;
+                    climb_motion_state = 0;
                 }
                 break;
             case 4:
             // Down to Robot Ground/Base
                 climberSubsystem.setClimbToGround();
                 if(climberSubsystem.climbPID.deadband_active) {
-                    wrist_motion_state = 0;
+                    climb_motion_state = 0;
                 }
                 break;
             default:
-                wrist_motion_state = 0;
+                climb_motion_state = 0;
                 break;
         }
-        if(Math.abs(climbPower) > (POWER - 0.1) ) {
-            wrist_motion_state = 0;
+        if(joystick_climb_motion != 3) {
+            climb_motion_state = 0;
         }
     }
 

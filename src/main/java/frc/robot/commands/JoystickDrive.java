@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -12,10 +11,6 @@ public class JoystickDrive extends CommandBase {
     private final static XboxController driverController = RobotContainer.driverController;
     public static double _throttle = driverController.getY(Hand.kLeft);
     public double _rotate = driverController.getX(Hand.kRight);
-
-    // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-    private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
     public JoystickDrive(DriveSubsystem drivetrain) {
         driveSubsystem = drivetrain;
@@ -33,8 +28,8 @@ public class JoystickDrive extends CommandBase {
     /********************************************
     * Dustin's Joystick Drive Code
     ********************************************/
-    double throttle = driverController.getY(Hand.kLeft);
-    double rotate = driverController.getX(Hand.kRight);
+    double throttle = -driverController.getY(Hand.kLeft);
+    double rotate = -driverController.getX(Hand.kRight);
     double throttle_sign;
 
     throttle_sign = throttle / (Math.abs(throttle));
@@ -53,9 +48,7 @@ public class JoystickDrive extends CommandBase {
     } else if (throttle < -1) {
          throttle = -1;
     }
-
-    // this->pSIM->joystick_input = throttle; TODO
-
+    
     //run the remapping function, convert the throttle input to speed output, can only accept a + input, -, input
     //causes the function to "blow up"
     //y = 1.458x4 - 2.0234x3 + 0.7049x2 + 0.1116x - 0.0203

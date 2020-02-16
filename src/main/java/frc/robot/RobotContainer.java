@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.ManualMoveArm;
 import frc.robot.commands.ManualMoveClimb;
@@ -17,6 +16,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
+import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.AutoMove;
 
 /**
@@ -32,7 +32,7 @@ public class RobotContainer {
     public static WinchSubsystem winchSubsystem = new WinchSubsystem();
     public static ArmSubsystem armSubsystem = new ArmSubsystem();
     public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
-    public static DifferentialDriveWheelSpeeds difWheelSpeeds = new DifferentialDriveWheelSpeeds();
+    public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
 
     // The driver's controller
     public static XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
@@ -81,14 +81,10 @@ public class RobotContainer {
             new InstantCommand(intakeSubsystem::outtakeBalls, intakeSubsystem)
         );
 
-        /*** DRIVER CONTROLLER***
+        /*** DRIVER CONTROLLER***/
         // testing auto
         new JoystickButton(driverController, Button.kA.value).whenPressed(
             new AutoMove(driveSubsystem, 1.0)
         );
-        */
-
-        // COMPLETED climber up (LB) and climber down (RB)
-        // COMPLETED Winch pull in (LT) and Winch let out (RT)
     }  
 }
