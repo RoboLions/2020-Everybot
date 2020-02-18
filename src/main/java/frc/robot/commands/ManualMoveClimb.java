@@ -7,10 +7,11 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ManualMoveClimb extends CommandBase {
+    public static final double TOWARDS_FRONT_POWER = 0.5; // TODO tune value to proper
+    public static final double TOWARDS_BACK_POWER = -0.7; // TODO tune value to proper
+
     private final ClimberSubsystem climberSubsystem;
     private final XboxController driverController = RobotContainer.driverController;
-    private double joystick_climb_motion; // describes how to climb should move based on bumpers
-    // 1 = inwards, 2 = outwards, 3 = Not Moving
 
     public static int climb_motion_state = 0;
 
@@ -24,16 +25,18 @@ public class ManualMoveClimb extends CommandBase {
     }
 
     @Override
-    public void execute() {        
+    public void execute() {  
+        double climbPower;
+        
         boolean left_bumper = driverController.getBumper(Hand.kLeft);
         boolean right_bumper = driverController.getBumper(Hand.kRight);
 
         if(left_bumper) {
-            joystick_climb_motion = 1; // moving inwards
+            climbPower = TOWARDS_FRONT_POWER; // moving inwards
         } else if(right_bumper) {
-            joystick_climb_motion = 2; // moving outwards
+            climbPower = TOWARDS_BACK_POWER; // moving outwards
         } else {
-            joystick_climb_motion = 3; // not moving based on bumpers
+            climbPower = 0; // not moving based on bumpers
         }
 
         boolean x = driverController.getXButton();
@@ -47,12 +50,7 @@ public class ManualMoveClimb extends CommandBase {
 
         switch(climb_motion_state) {
             case 0:
-                
-                if(joystick_climb_motion == 1) {
-                    climberSubsystem.moveClimbIn();
-                } else if(joystick_climb_motion == 2) {
-                    climberSubsystem.moveClimbOut();
-                }
+                climberSubsystem.setClimbPower(climbPower);
 
                 if(climberSubsystem.climbPID.deadband_active) {
                     climb_motion_state = 0;
@@ -102,7 +100,7 @@ public class ManualMoveClimb extends CommandBase {
                 climb_motion_state = 0;
                 break;
         }
-        if(joystick_climb_motion != 3) {
+        if(left_bumper || right_bumper) {
             climb_motion_state = 0;
         }
     }

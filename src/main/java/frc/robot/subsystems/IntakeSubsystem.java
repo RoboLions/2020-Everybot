@@ -8,7 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    public static final double INTAKE_POWER = 0.2; // placeholder
+    public static final double IN_POWER = 0.6; // TODO tune value to proper
+    public static final double OUT_POWER = -0.6; // TODO tune value to proper
     public static final double STOP_POWER = 0.0;
 
     private static final WPI_TalonSRX intakeMotor = RobotMap.intakeMotor;
@@ -18,11 +19,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void intakeBalls() {
-        intakeMotor.set(INTAKE_POWER);
+        intakeMotor.set(IN_POWER);
     }
 
     public void outtakeBalls() {
-        intakeMotor.set(-INTAKE_POWER);
+        intakeMotor.set(OUT_POWER);
     }
 
     public void stop() {

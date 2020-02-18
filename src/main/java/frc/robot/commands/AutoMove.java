@@ -32,7 +32,7 @@ public class AutoMove extends CommandBase {
         public void execute() { 
                 // This function is constantly being called in the class at 50 Hz
                 // This implements a straight move without any heading control 
-                drivesubsystem.autoDrive(target_distance);
+                drivesubsystem.autoDrive(target_distance, 0.0); //TODO pls check parameter
                 // System.out.println("AUTO WORKS");
         }
 

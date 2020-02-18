@@ -18,6 +18,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.AutoMove;
+import frc.robot.commands.IntakeBalls;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -73,12 +74,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /*** MANIPULATOR CONTROLLER***/
         // ball intake
-        new JoystickButton(manipulatorController, Button.kA.value).whenHeld(
-            new InstantCommand(intakeSubsystem::intakeBalls, intakeSubsystem)
+        new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
+            new IntakeBalls(intakeSubsystem, -1)
         );
         // ball outtake
-        new JoystickButton(manipulatorController, Button.kY.value).whenHeld(
-            new InstantCommand(intakeSubsystem::outtakeBalls, intakeSubsystem)
+        new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
+            new IntakeBalls(intakeSubsystem, 1)
         );
 
         /*** DRIVER CONTROLLER***/
@@ -86,5 +87,13 @@ public class RobotContainer {
         new JoystickButton(driverController, Button.kA.value).whenPressed(
             new AutoMove(driveSubsystem, 1.0)
         );
+        /*
+        new JoystickButton(driverController, Button.kBumperLeft.value).whenHeld(
+            new InstantCommand(climberSubsystem::moveClimbIn, climberSubsystem)
+        );
+        new JoystickButton(driverController, Button.kBumperRight.value).whenHeld(
+            new InstantCommand(climberSubsystem::moveClimbOut, climberSubsystem)
+        );
+        */
     }  
 }

@@ -37,7 +37,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    RobotContainer.driveSubsystem.setModeVoltage();
+    m_robotContainer.driveSubsystem.setModePercentVoltage();
+    m_robotContainer.driveSubsystem.resetEncoders();
+    m_robotContainer.driveSubsystem.ZeroYaw();
   }
 
   /**
@@ -51,6 +53,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    SmartDashboard.putNumber("ARM Pitch", -m_robotContainer.armSubsystem.getPitch());
+    // inverted pitch because of how everybot is built
   }
 
   @Override
@@ -74,6 +78,13 @@ public class Robot extends TimedRobot {
         // Put default auto code here
         break;
     }
+  }
+
+  @Override
+  public void teleopInit() {
+    // TODO Auto-generated method stub
+    m_robotContainer.driveSubsystem.resetEncoders();
+    m_robotContainer.driveSubsystem.ZeroYaw();
   }
 
   /**

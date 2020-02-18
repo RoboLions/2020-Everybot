@@ -25,11 +25,13 @@ public class JoystickDrive extends CommandBase {
     @Override
     public void execute() {
         
-    /********************************************
-    * Dustin's Joystick Drive Code
-    ********************************************/
+    /***********************************************************
+    * Joystick Drive Code to Correct for Joystick Irregularities
+    ************************************************************/
     double throttle = -driverController.getY(Hand.kLeft);
     double rotate = -driverController.getX(Hand.kRight);
+
+    /** 
     double throttle_sign;
 
     throttle_sign = throttle / (Math.abs(throttle));
@@ -73,24 +75,28 @@ public class JoystickDrive extends CommandBase {
 
 
     double joystick_output = speed_multiplier  * remapped_rate;
-    driveSubsystem.driveRoboLionsPID(joystick_output, rotate);
+    */
+    
+    //driveSubsystem.driveRoboLionsPID(joystick_output, rotate);
+    //driveSubsystem.driveRoboLionsPID(joystick_output, 0.0);
     // driveSubsystem.driveRoboLionsPID(remapped_rate, rotate);
-    // this->driveRoboLionsPID(remapped_rate, rotate);
 
-        /*
+        
         // PID Testing Joystick Inputs
         if (driverController.getY(Hand.kLeft) > 0.2) 
         {
-            throttle = 2;
+            throttle = 0.5;
         } 
         else if (driverController.getY(Hand.kLeft) < -0.2) {
-            throttle = -2;
+            throttle = -0.5;
         }
         else {
             throttle = 0.0;
         }
         rotate = 0.0;
-        */
+
+        driveSubsystem.driveRoboLionsPID(throttle, rotate);
+        
         /*
         throttle = driverController.getY(Hand.kLeft);
         rotate = driverController.getX(Hand.kRight);
@@ -133,57 +139,6 @@ public class JoystickDrive extends CommandBase {
 
         // driveSubsystem.drive(xSpeed, rot);
     }
-
-
-/*
-void obj_Robo_Code_Base::joystick_drive(double time)
-
-{
-       double throttle = this->generate_sinewave(time, 0.1, 1.0);
-       double rotate = 0.0;
-       double throttle_sign;
-
-       throttle_sign = throttle / (fabs(throttle));
-
-       //limit the throttle to 1.0
-       if (throttle > 1) {
-            throttle = 1;
-       }
-       else if (throttle < -1) {
-            throttle = -1;
-       }
-
-       this->pSIM->joystick_input = throttle;
-
-       //run the remapping function, convert the throttle input to speed output, can only accept a + input, -, input
-       //causes the function to "blow up"
-       //y = 1.458x4 - 2.0234x3 + 0.7049x2 + 0.1116x - 0.0203
-       throttle = fabs(throttle);
-
-       double remapped_rate =
-              (1.458*throttle*throttle*throttle*throttle
-              - 2.0234*throttle*throttle*throttle
-              + 0.7049*throttle*throttle
-              + 0.1116*throttle
-              - 0.0203);
-    
-       remapped_rate = remapped_rate * throttle_sign;
-
-       if (throttle_sign > 0.0) {
-            remapped_rate += 0.02;
-       } else {
-            remapped_rate -= 0.02;
-       }
-
-       double speed_multiplier = 8.0;
-
-       this->pSIM->joystick_output = speed_multiplier  * remapped_rate;
-
-       this->driveRoboLionsPID(remapped_rate, rotate);
-
-    }
-       return;
-       */
 
     @Override
     public boolean isFinished() {

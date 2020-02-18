@@ -9,10 +9,10 @@ public class RobotMap {
     public static final int RIGHT_DRIVE_PORT = 2;
 
     public static final int INTAKE_PORT = 10; // placeholder
-    public static final int ARM_PORT = 13; // placeholder
-    public static final int ARM_IMU_PORT = 14; // placeholder
     public static final int CLIMBER_PORT = 11; // placeholder
     public static final int WINCH_PORT = 12; // placeholder
+    public static final int ARM_PORT = 13; // placeholder
+    public static final int ARM_IMU_PORT = 14; // placeholder
     
     /************************************************************************************************************/
 
@@ -20,14 +20,12 @@ public class RobotMap {
     public static WPI_TalonFX rightDriveMotor = new WPI_TalonFX(RIGHT_DRIVE_PORT);
     
     public static WPI_TalonSRX intakeMotor = new WPI_TalonSRX(INTAKE_PORT);
-
+    public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(CLIMBER_PORT);
+    public static WPI_TalonSRX winchMotor = new WPI_TalonSRX(WINCH_PORT);
     public static WPI_TalonSRX armMotor = new WPI_TalonSRX(ARM_PORT);
 
     public static PigeonIMU arm_imu = new PigeonIMU(ARM_IMU_PORT);
-
-    public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(CLIMBER_PORT);
-
     public static PigeonIMU drive_imu = new PigeonIMU(climberMotor);
 
-    public static WPI_TalonSRX winchMotor = new WPI_TalonSRX(WINCH_PORT);
+
 }

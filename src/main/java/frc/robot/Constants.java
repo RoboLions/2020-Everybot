@@ -23,12 +23,12 @@ public final class Constants {
 
   public static final class ArmConstants {
     public static final int TIMEOUT_MS = 10;
-    public static final double kP = 1;
-    public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kP = 0.036; //0.06 // 0.036 ZN 
+    public static final double kI = 0.1125;
+    public static final double kD = 0.00288;
 
-    public static final double GROUND_POSITION = -1;
-    public static final double SCORE_POSITION = -45;
+    public static final double GROUND_POSITION = 20;
+    public static final double SCORE_POSITION = 50;//56;
   }
 
   public static final class ClimbConstants {

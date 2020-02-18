@@ -10,9 +10,6 @@ import frc.robot.lib.RoboLionsPID;
 import frc.robot.Constants.ClimbConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
-    public static final double LET_OUT_POWER = 0.2; // TODO tune value to proper
-    public static final double PULL_IN_POWER = -0.2; // TODO tune value to proper
-
     private static WPI_TalonSRX climbMotor = RobotMap.climberMotor;
     public RoboLionsPID climbPID = new RoboLionsPID();
 
@@ -53,12 +50,8 @@ public class ClimberSubsystem extends SubsystemBase {
         moveClimbToPosition(ClimbConstants.DOWN_POSITION);
     }
 
-    public void moveClimbOut() {
-        climbMotor.set(LET_OUT_POWER);
-    }
-
-    public void moveClimbIn() {
-        climbMotor.set(PULL_IN_POWER);
+    public void setClimbPower(double power) {
+        climbMotor.set(power);
     }
 
     public void stop() {
