@@ -34,7 +34,7 @@ public class DriveSubsystem extends SubsystemBase {
     // This is for an encoder mounted to the motor
     private static final double TICKS_PER_METER = (MOTOR_ENCODER_CODES_PER_REV * GEAR_RATIO) / (WHEEL_CIRCUMFERENCE);
     private static final double METERS_PER_TICKS = 1 / TICKS_PER_METER;
-    private static final double BOT_WHEEL_TO_WHEEL_DIAMETER = 0.61;//METERS
+    private static final double BOT_WHEEL_TO_WHEEL_DIAMETER = 0.49;//METERS
 
     //90 degrees /360 = 2*PI*R 
     private static final double HEADING_BOT_DEG_TO_BOT_WHEEL_DISTANCE = (BOT_WHEEL_TO_WHEEL_DIAMETER * Math.PI)/360.0;
@@ -74,8 +74,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Rate Drive PID
         leftForwardPID.initialize2(
-            0.0, // Proportional Gain //4.5
-            0.0, // Integral Gain //20
+            2.925, // Proportional Gain //2.925 ZN w FF
+            42.12, // Integral Gain //42.12 ZN w FF
             0.0, // Derivative Gain //0
             0.0, // Cage Limit 0.3 //0
             0.0, // Deadband //0
@@ -86,8 +86,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Rate Drive PID
         rightForwardPID.initialize2(
-            0.0, // Proportional Gain //3
-            0.0, // Integral Gain //20
+            2, // Proportional Gain //2.925 ZN w FF
+            20, // Integral Gain //42.12 ZN w FF
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3
             0.0, // Deadband //0
@@ -98,25 +98,25 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Position Command PID for Autonomous and 
         positionPID.initialize2(
-            0.0, // Proportional Gain //1.35
-            0.0, // Integral Gain //5
+            1.35, // Proportional Gain //1.35
+            5, // Integral Gain //5
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3 //0.1 //0.2
             0.0, // Deadband //0
-            1,// MaxOutput Meters/sec 0.25 //100 
+            0.5,// MaxOutput Meters/sec 0.25 //100 //1
             true, //enableCage
             false //enableDeadband
         );
 
         // Heading Command PID for Autonomous and 
         headingPID.initialize2(
-            0.0, // Proportional Gain 
-            0.0, // Integral Gain 
+            7.5, // Proportional Gain //15
+            10, // Integral Gain 
             0.0, // Derivative Gain 
             0.0, // Cage Limit //0.3
             0.0, // Deadband
             180, // MaxOutput Degrees/sec 0.25 //100 
-            false, //enableCage
+            true, //enableCage
             false //enableDeadband
         );
     }
@@ -143,8 +143,8 @@ public class DriveSubsystem extends SubsystemBase {
     
         //final double leftFeedforward = calculateNew(leftSpeed, 0, 1.4, 2.6, 0); // ks 1 to 1.5
         //final double rightFeedforward = calculateNew(rightSpeed, 0, 1.2, 2.6, 0);
-        final double leftFeedforward = calculateNew(leftSpeed, 0, 0.8, 0.5, 0); // ks 1 to 1.5
-        final double rightFeedforward = calculateNew(rightSpeed, 0, 0.8, 0.5, 0);
+        final double leftFeedforward = calculateNew(leftSpeed, 0, 0.7, 3.2, 0); // ks=0.8, kv=0.5
+        final double rightFeedforward = calculateNew(rightSpeed, 0, 0.7, 2.8, 0);
 
         double batteryVoltage = RobotController.getBatteryVoltage(); // getting battery voltage from PDP via the rio
 
@@ -194,6 +194,7 @@ public class DriveSubsystem extends SubsystemBase {
         // System.out.println("Error L - R" + (getLeftEncoderVelocityMetersPerSecond()-getRightEncoderVelocityMetersPerSecond()));
         //SmartDashboard.putNumber("Error L - R", (getLeftEncoderVelocityMetersPerSecond()-getRightEncoderVelocityMetersPerSecond()));
         
+        /*
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
         SmartDashboard.putNumber("rightSpeed", rightSpeed);
         SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
@@ -205,7 +206,8 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Right Encoder Counts", getRightEncoderPosition());
         SmartDashboard.putNumber("Left Dist Meters", leftDistanceTravelledInMeters());
         SmartDashboard.putNumber("Right Dist Meters", rightDistanceTravelledInMeters());
-        // System.out.println("L: " + getLeftEncoderVelocityMetersPerSecond() + "/ R:" + getRightEncoderVelocityMetersPerSecond());
+        */
+        //System.out.println(getLeftEncoderVelocityMetersPerSecond() + "," + getRightEncoderVelocityMetersPerSecond());
         // System.out.println("Left Error: " + (leftSpeed-getLeftEncoderVelocityMetersPerSecond()) + "/ Right Error: " + (getRightEncoderVelocityMetersPerSecond()-rightSpeed));
         // System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);
     }
@@ -216,7 +218,8 @@ public class DriveSubsystem extends SubsystemBase {
     public void driveWithRotation(double linearTravelSpeed, double rotateSpeed) {
         // input speed is meters per second, input rotation is bot rotation 
         // speed in meters per second
-        linearTravelSpeed = (-1*linearTravelSpeed);
+        // dev bot requires the output to be inverted, everybot needs it to NOT be inverted
+        linearTravelSpeed = (1*linearTravelSpeed);
         double leftSpeed = (linearTravelSpeed + rotateSpeed);
         double rightSpeed = (linearTravelSpeed - rotateSpeed);
         straightDrive(leftSpeed, rightSpeed);
@@ -348,8 +351,10 @@ public class DriveSubsystem extends SubsystemBase {
         double headingError = headingPID.execute(headingCommand, headingFeedback);
         double headingErrorMeters = HEADING_BOT_DEG_TO_BOT_WHEEL_DISTANCE * headingError;
 
+        System.out.println(headingCommand + "," + headingFeedback);
 
         double position_feedback = distanceTravelledinMeters();
+        SmartDashboard.putNumber("Auto Distance", position_feedback);
         // positionError is in meters per second
         double positionError = positionPID.execute(distance, position_feedback);
 
@@ -361,8 +366,10 @@ public class DriveSubsystem extends SubsystemBase {
         // We modulate our speed of the bot to close out
         // the position error, making it eventually zero
         driveWithRotation(positionError, headingErrorMeters);
+        //driveWithRotation(0.0, headingErrorMeters);
+        //driveWithRotation(positionError, 0);
         // riveWithRotation(0.5, 0.0);
-         System.out.println("Pos " + position_feedback + " PE " + positionError);
+         //System.out.println("Pos " + position_feedback + " PE " + positionError);
         // System.out.println("TD " + distance + " // DT " + position_feedback);
     }
 

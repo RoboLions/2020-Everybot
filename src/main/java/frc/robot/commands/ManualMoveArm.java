@@ -23,7 +23,7 @@ public class ManualMoveArm extends CommandBase {
 
     @Override
     public void execute() {
-        System.out.println(-armSubsystem.getPitch());
+        //System.out.println(-armSubsystem.getPitch());
         double armPower = manipulatorController.getY(Hand.kLeft);
         boolean x = manipulatorController.getXButton();
         // x button = ground

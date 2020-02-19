@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -25,7 +26,8 @@ public class AutoMove extends CommandBase {
 
         @Override
         public void initialize() {
-
+        drivesubsystem.resetEncoders();
+        drivesubsystem.ZeroYaw();
         }
 
         @Override
@@ -40,11 +42,11 @@ public class AutoMove extends CommandBase {
         public boolean isFinished() {
                 // This function is constantly being called in the class at 50 Hz
                 // This helps to determine when you are done with the command
-                // boolean tempReturn = false;
+                //boolean tempReturn = false;
                 double distance_driven = drivesubsystem.distanceTravelledinMeters() - start_dist_meters;
                 double positionError = Math.abs(target_distance - distance_driven);
                 return(positionError < 0.01); // stop whenever we go the commanded distance within 1 cm
-                // return(tempReturn);
+                //return(tempReturn);
         } 
 }	
 

@@ -18,6 +18,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.AutoMove;
+import frc.robot.commands.AutoTurn;
 import frc.robot.commands.IntakeBalls;
 
 /**
@@ -74,18 +75,21 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /*** MANIPULATOR CONTROLLER***/
         // ball intake
-        new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
+        new JoystickButton(manipulatorController, Button.kA.value).whenHeld(
             new IntakeBalls(intakeSubsystem, -1)
         );
         // ball outtake
-        new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
+        new JoystickButton(manipulatorController, Button.kY.value).whenHeld(
             new IntakeBalls(intakeSubsystem, 1)
         );
 
         /*** DRIVER CONTROLLER***/
         // testing auto
-        new JoystickButton(driverController, Button.kA.value).whenPressed(
-            new AutoMove(driveSubsystem, 1.0)
+        new JoystickButton(driverController, Button.kStart.value).whenPressed(
+            new AutoMove(driveSubsystem, 2.0)
+        );
+        new JoystickButton(driverController, Button.kBack.value).whenPressed(
+            new AutoTurn(driveSubsystem, 20)
         );
         /*
         new JoystickButton(driverController, Button.kBumperLeft.value).whenHeld(

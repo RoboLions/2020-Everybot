@@ -70,6 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void resetPitch() {
-        imu.setPitch(0, ArmConstants.TIMEOUT_MS);
+        // TODO Figure out how to set the pitch
+        imu.setYaw(0, ArmConstants.TIMEOUT_MS);
     }
 }

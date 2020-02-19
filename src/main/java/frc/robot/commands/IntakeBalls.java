@@ -27,6 +27,7 @@ public class IntakeBalls extends CommandBase {
         } else if(direction == 1) {
             intakeSubsystem.outtakeBalls();
         }
+        // add an else isFinished(); ??
     }
 
     @Override
@@ -36,6 +37,6 @@ public class IntakeBalls extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        intakeSubsystem.stop();
     }
 }

@@ -33,7 +33,7 @@ public class AutoTurn extends CommandBase {
         // This function is constantly being called in the class at 50 Hz
         // This implements a heading move without any forward movement 
         drivesubsystem.autoDrive(0.0, target_heading); //TODO pls check parameter
-        // System.out.println("AUTO WORKS");
+        System.out.println("AUTO WORKS");
   }
   // Returns true when the command should end.
   @Override
@@ -43,7 +43,7 @@ public class AutoTurn extends CommandBase {
     // boolean tempReturn = false;
     double current_heading = drivesubsystem.getYaw() - initial_heading;
     double headingError = Math.abs(target_heading - current_heading);
-    return(headingError < 1.0); // stop whenever we go to the commanded heading within 1 degree
+    return(headingError < 0.5); // stop whenever we go to the commanded heading within 1 degree
     // return(tempReturn);
   }
 }

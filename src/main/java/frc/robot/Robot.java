@@ -54,7 +54,20 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("ARM Pitch", -m_robotContainer.armSubsystem.getPitch());
+    SmartDashboard.putNumber("Yaw", m_robotContainer.driveSubsystem.getYaw());
     // inverted pitch because of how everybot is built
+    /*SmartDashboard.putNumber("leftSpeed", m_robotContainer.driveSubsystem.leftSpeed);
+    SmartDashboard.putNumber("rightSpeed", rightSpeed);
+    SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
+    SmartDashboard.putNumber("Right Encoder V", getRightEncoderVelocityMetersPerSecond());
+    SmartDashboard.putNumber("Left Motor Voltage", leftMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Right Motor Voltage", rightMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
+    */
+    SmartDashboard.putNumber("Left Encoder Counts", m_robotContainer.driveSubsystem.getLeftEncoderPosition());
+    SmartDashboard.putNumber("Right Encoder Counts", m_robotContainer.driveSubsystem.getRightEncoderPosition());
+    SmartDashboard.putNumber("Left Dist Meters", m_robotContainer.driveSubsystem.leftDistanceTravelledInMeters());
+    SmartDashboard.putNumber("Right Dist Meters", m_robotContainer.driveSubsystem.rightDistanceTravelledInMeters());
   }
 
   @Override
