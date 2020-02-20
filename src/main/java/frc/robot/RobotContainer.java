@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.ManualMoveArm;
 import frc.robot.commands.ManualMoveClimb;
@@ -64,6 +63,10 @@ public class RobotContainer {
         winchSubsystem.setDefaultCommand(
             new ManualMoveWinch(winchSubsystem)
         );
+
+        intakeSubsystem.setDefaultCommand(
+            new IntakeBalls(intakeSubsystem)
+        );
     }
 
     /**
@@ -73,16 +76,6 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        /*** MANIPULATOR CONTROLLER***/
-        // ball intake
-        new JoystickButton(manipulatorController, Button.kA.value).whenHeld(
-            new IntakeBalls(intakeSubsystem, -1)
-        );
-        // ball outtake
-        new JoystickButton(manipulatorController, Button.kY.value).whenHeld(
-            new IntakeBalls(intakeSubsystem, 1)
-        );
-
         /*** DRIVER CONTROLLER***/
         // testing auto
         new JoystickButton(driverController, Button.kStart.value).whenPressed(
@@ -91,13 +84,5 @@ public class RobotContainer {
         new JoystickButton(driverController, Button.kBack.value).whenPressed(
             new AutoTurn(driveSubsystem, 20)
         );
-        /*
-        new JoystickButton(driverController, Button.kBumperLeft.value).whenHeld(
-            new InstantCommand(climberSubsystem::moveClimbIn, climberSubsystem)
-        );
-        new JoystickButton(driverController, Button.kBumperRight.value).whenHeld(
-            new InstantCommand(climberSubsystem::moveClimbOut, climberSubsystem)
-        );
-        */
     }  
 }

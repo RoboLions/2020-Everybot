@@ -1,16 +1,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;/**
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.IntakeSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
+
+/**
  *
  */
 public class IntakeBalls extends CommandBase {
     private final IntakeSubsystem intakeSubsystem;
-    private double direction;
-    // direction: -1 is inwards, 1 is outwards
+    private final static XboxController manipulatorController = RobotContainer.manipulatorController;
     
-    public IntakeBalls(IntakeSubsystem intake, double dir) {
-        direction = dir;
+    public IntakeBalls(IntakeSubsystem intake) {
         intakeSubsystem = intake;
         addRequirements(intakeSubsystem);
       }
@@ -22,12 +24,14 @@ public class IntakeBalls extends CommandBase {
 
     @Override
     public void execute() {
-        if(direction == -1) {
+        boolean y = manipulatorController.getYButton(); // outtake
+        boolean a = manipulatorController.getAButton(); // intake
+
+        if(a) {
             intakeSubsystem.intakeBalls();
-        } else if(direction == 1) {
+        } else if(y) {
             intakeSubsystem.outtakeBalls();
         }
-        // add an else isFinished(); ??
     }
 
     @Override
