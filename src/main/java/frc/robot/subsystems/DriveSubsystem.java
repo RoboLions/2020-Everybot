@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.RobotMap;
+import frc.robot.lib.RoboLionsMotionProfile;
 import frc.robot.lib.RoboLionsPID;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -36,6 +37,8 @@ public class DriveSubsystem extends SubsystemBase {
     private static final double METERS_PER_TICKS = 1 / TICKS_PER_METER;
     private static final double BOT_WHEEL_TO_WHEEL_DIAMETER = 0.49;//METERS
 
+    public boolean state_flag_motion_profile = true;
+
     //90 degrees /360 = 2*PI*R 
     private static final double HEADING_BOT_DEG_TO_BOT_WHEEL_DISTANCE = (BOT_WHEEL_TO_WHEEL_DIAMETER * Math.PI)/360.0;
 
@@ -49,6 +52,9 @@ public class DriveSubsystem extends SubsystemBase {
 	public RoboLionsPID headingPID = new RoboLionsPID();
     //public RoboLionsPID limelightPID = new RoboLionsPID();
     public RoboLionsPID positionPID = new RoboLionsPID();
+    public RoboLionsMotionProfile positionMotionProfile = new RoboLionsMotionProfile();
+    public RoboLionsMotionProfile headingMotionProfile = new RoboLionsMotionProfile();
+
 
     public DriveSubsystem() {
         ZeroYaw();
@@ -98,20 +104,20 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Position Command PID for Autonomous and 
         positionPID.initialize2(
-            1.35, // Proportional Gain //1.35
-            5, // Integral Gain //5
+            2, // Proportional Gain //1.35
+            10, // Integral Gain //5
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3 //0.1 //0.2
             0.0, // Deadband //0
-            0.5,// MaxOutput Meters/sec 0.25 //100 //1
-            true, //enableCage
+            2.0,// MaxOutput Meters/sec 0.25 //100 //1
+            false, //enableCage
             false //enableDeadband
         );
 
         // Heading Command PID for Autonomous and 
         headingPID.initialize2(
-            7.5, // Proportional Gain //15
-            10, // Integral Gain 
+            7.5, // Proportional Gain //15 // 7.5
+            10.0, // Integral Gain // 10
             0.0, // Derivative Gain 
             0.0, // Cage Limit //0.3
             0.0, // Deadband
@@ -143,8 +149,8 @@ public class DriveSubsystem extends SubsystemBase {
     
         //final double leftFeedforward = calculateNew(leftSpeed, 0, 1.4, 2.6, 0); // ks 1 to 1.5
         //final double rightFeedforward = calculateNew(rightSpeed, 0, 1.2, 2.6, 0);
-        final double leftFeedforward = calculateNew(leftSpeed, 0, 0.7, 3.2, 0); // ks=0.8, kv=0.5
-        final double rightFeedforward = calculateNew(rightSpeed, 0, 0.7, 2.8, 0);
+        final double leftFeedforward = calculateNew(leftSpeed, 0, 0.7, 3, 0); // ks=0.8, kv=0.5
+        final double rightFeedforward = calculateNew(rightSpeed, 0, 0.7, 3, 0);
 
         double batteryVoltage = RobotController.getBatteryVoltage(); // getting battery voltage from PDP via the rio
 
@@ -344,6 +350,21 @@ public class DriveSubsystem extends SubsystemBase {
     public void autoDrive(double distance, double heading) { // distance is in meters, heading is in degrees
         // double left_speed; 
         // double right_speed;
+        double start_dist = distanceTravelledinMeters();
+        if(state_flag_motion_profile) {
+            positionMotionProfile.init(
+                        start_dist, //start position
+                        distance, // target position
+                        1.5, // max vel 
+                        1.0, // max accel
+                        0.02, // execution period 
+                        2.0 // deceleration
+            );
+            state_flag_motion_profile = false;
+        }
+
+        double position_profile_command = positionMotionProfile.execute();
+        double feed_forward_rate = positionMotionProfile.velocity_feed_forward;
 
         double headingFeedback = getYaw(); // in degrees
         double headingCommand = heading; 
@@ -351,12 +372,17 @@ public class DriveSubsystem extends SubsystemBase {
         double headingError = headingPID.execute(headingCommand, headingFeedback);
         double headingErrorMeters = HEADING_BOT_DEG_TO_BOT_WHEEL_DISTANCE * headingError;
 
-        System.out.println(headingCommand + "," + headingFeedback);
+        //System.out.println(headingCommand + "," + headingFeedback);
 
         double position_feedback = distanceTravelledinMeters();
         SmartDashboard.putNumber("Auto Distance", position_feedback);
         // positionError is in meters per second
-        double positionError = positionPID.execute(distance, position_feedback);
+        double positionError = positionPID.execute(position_profile_command, position_feedback);
+
+        System.out.println("Command: " + position_profile_command);
+        System.out.println("Feedback: " + position_feedback);
+        System.out.println("PID Error: " + positionError);
+        System.out.println("\n");
 
         // left_speed = output;
         // right_speed = output;

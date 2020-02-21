@@ -26,14 +26,19 @@ public class AutoMove extends CommandBase {
 
         @Override
         public void initialize() {
-        drivesubsystem.resetEncoders();
-        drivesubsystem.ZeroYaw();
+                drivesubsystem.resetEncoders();
+                drivesubsystem.ZeroYaw();
+                start_dist_meters = drivesubsystem.distanceTravelledinMeters();
+                drivesubsystem.state_flag_motion_profile = true;
         }
 
         @Override
         public void execute() { 
                 // This function is constantly being called in the class at 50 Hz
                 // This implements a straight move without any heading control 
+                //double position_profile_command = drivesubsystem.positionMotionProfile.execute();
+                //double feed_forward_rate = drivesubsystem.positionMotionProfile.velocity_feed_forward;                
+                //System.out.println("Command: " + position_profile_command + " , FF: " + feed_forward_rate);
                 drivesubsystem.autoDrive(target_distance, 0.0); //TODO pls check parameter
                 // System.out.println("AUTO WORKS");
         }

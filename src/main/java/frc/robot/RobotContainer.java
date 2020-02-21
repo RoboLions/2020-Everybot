@@ -79,7 +79,7 @@ public class RobotContainer {
         /*** DRIVER CONTROLLER***/
         // testing auto
         new JoystickButton(driverController, Button.kStart.value).whenPressed(
-            new AutoMove(driveSubsystem, 2.0)
+            new AutoMove(driveSubsystem, 10.0)
         );
         new JoystickButton(driverController, Button.kBack.value).whenPressed(
             new AutoTurn(driveSubsystem, 20)
