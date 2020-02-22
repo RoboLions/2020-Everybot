@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.RobotMap;
 import frc.robot.lib.RoboLionsMotionProfile;
@@ -136,19 +135,6 @@ public class DriveSubsystem extends SubsystemBase {
     * 2/15/20 Use this for anything that has to deal with closed loop rate control
     ******************************************************************************/
     public void straightDrive(double leftSpeed, double rightSpeed) {
-        /*
-        // computing voltage command to send to Talons based on the setpoint speed ie. how fast we want to go
-        final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
-        final double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
-
-        final double leftOutput = m_leftPIDController.calculate(getLeftEncoderVelocity(), speeds.leftMetersPerSecond);
-        final double rightOutput = m_rightPIDController.calculate(getRightEncoderVelocity(), speeds.rightMetersPerSecond);
-        m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        m_rightGroup.setVoltage(rightOutput + rightFeedforward);
-        */
-    
-        //final double leftFeedforward = calculateNew(leftSpeed, 0, 1.4, 2.6, 0); // ks 1 to 1.5
-        //final double rightFeedforward = calculateNew(rightSpeed, 0, 1.2, 2.6, 0);
         final double leftFeedforward = calculateNew(leftSpeed, 0, 0.7, 3, 0); // ks=0.8, kv=0.5
         final double rightFeedforward = calculateNew(rightSpeed, 0, 0.7, 3, 0);
 
@@ -158,13 +144,8 @@ public class DriveSubsystem extends SubsystemBase {
             batteryVoltage = 1;
         }
 
-        //final double leftFeedforward = 0;
-        //final double rightFeedforward = 0;
-
         double leftOutput = leftForwardPID.execute(leftSpeed, getLeftEncoderVelocityMetersPerSecond());
         double rightOutput = rightForwardPID.execute(rightSpeed, getRightEncoderVelocityMetersPerSecond());
-        //SmartDashboard.putNumber("Left Output", leftOutput);
-        //SmartDashboard.putNumber("Right Output", rightOutput);
 
         double LVoltagePercentCommand = ((leftOutput + leftFeedforward) / batteryVoltage);
         double RVoltagePercentCommand = ((rightOutput + rightFeedforward) / batteryVoltage);
@@ -189,17 +170,6 @@ public class DriveSubsystem extends SubsystemBase {
         leftMotor.set(LVoltagePercentCommand);
         rightMotor.set(RVoltagePercentCommand);
 
-        // m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        // m_rightGroup.setVoltage(rightOutput + rightFeedforward);
-        // m_leftGroup.setVoltage(JoystickDrive.throttle);
-        // m_rightGroup.setVoltage(JoystickDrive.throttle);
-
-        // System.out.println("Hello World!");
-        //System.out.println("LFF " + leftFeedforward + " LPD " + leftOutput + " RFF " + rightFeedforward + " RPD " + rightOutput);
-        // There is a + for the error since right encoder velocity was already negative so -- = +
-        // System.out.println("Error L - R" + (getLeftEncoderVelocityMetersPerSecond()-getRightEncoderVelocityMetersPerSecond()));
-        //SmartDashboard.putNumber("Error L - R", (getLeftEncoderVelocityMetersPerSecond()-getRightEncoderVelocityMetersPerSecond()));
-        
         /*
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
         SmartDashboard.putNumber("rightSpeed", rightSpeed);
@@ -375,14 +345,14 @@ public class DriveSubsystem extends SubsystemBase {
         //System.out.println(headingCommand + "," + headingFeedback);
 
         double position_feedback = distanceTravelledinMeters();
-        SmartDashboard.putNumber("Auto Distance", position_feedback);
+        //SmartDashboard.putNumber("Auto Distance", position_feedback);
         // positionError is in meters per second
         double positionError = positionPID.execute(position_profile_command, position_feedback);
 
-        System.out.println("Command: " + position_profile_command);
-        System.out.println("Feedback: " + position_feedback);
-        System.out.println("PID Error: " + positionError);
-        System.out.println("\n");
+        //System.out.println("Command: " + position_profile_command);
+        //System.out.println("Feedback: " + position_feedback);
+        //System.out.println("PID Error: " + positionError);
+        //System.out.println("\n");
 
         // left_speed = output;
         // right_speed = output;

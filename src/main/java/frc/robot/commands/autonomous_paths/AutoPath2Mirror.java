@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.AutonomousPaths;
+package frc.robot.commands.autonomous_paths;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
@@ -19,11 +19,11 @@ import frc.robot.subsystems.IntakeSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoPath2 extends SequentialCommandGroup {
+public class AutoPath2Mirror extends SequentialCommandGroup {
   /**
    * Creates a new middle baseline
    */
-  public AutoPath2(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
+  public AutoPath2Mirror(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
     // Add your commands in the super() call, e.g.
     super(new AutoTurn(driveSubsystem, -45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
     //move to lower goal

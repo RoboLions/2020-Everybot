@@ -5,12 +5,11 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.AutonomousPaths;
+package frc.robot.commands.autonomous_paths;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoTurn;
-import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.subsystems.DriveSubsystem;
@@ -19,22 +18,18 @@ import frc.robot.subsystems.IntakeSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoPath1Mirror extends SequentialCommandGroup {
+public class AutoPath3 extends SequentialCommandGroup {
   /**
-   * Creates a new Trench baseline
+   * Creates a far baseline
    */
-  public AutoPath1Mirror(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
+  public AutoPath3(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6), new Outtake(intakeSubsystem),
-    //move to target zone and dump
-        new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-        //turn around and return
-        new AutoTurn(driveSubsystem, 45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-        //turn left and head to trench
-        new AutoTurn(driveSubsystem, -45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 15, 0.6),
-        //turn right and go further into the trench
-        new Intake(intakeSubsystem, Mode.TIME,1)); 
-        //suck up powercells
-  }
+    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 8.75, 0.6), new AutoTurn(driveSubsystem, -90, 0.6),
+    //pass autoline and head towards target zone
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 12.5, 0.6), new  AutoTurn(driveSubsystem, 90, 0.6),
+        //position to dump
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 1.25, 0.6), new Outtake(intakeSubsystem, Mode.TIME,1)); 
+        //dump into bottom port
+}
 }

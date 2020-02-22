@@ -5,9 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.AutonomousPaths;
+package frc.robot.commands.autonomous_paths;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoTurn;

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.AutonomousPaths;
+package frc.robot.commands.autonomous_paths;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
@@ -34,7 +34,7 @@ public class AutoPath1 extends SequentialCommandGroup {
         //turn left and head to trench
         new AutoTurn(driveSubsystem, -45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 15, 0.6),
         //turn right and go further into the trench
-        new Intake(intakeSubsystem, Mode.TIME,1)); 
+        new Intake(intakeSubsystem, Mode.TIME, 1)); 
         //suck up powercells
   }
 }

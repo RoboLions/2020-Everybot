@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.AutonomousPaths;
+package frc.robot.commands.autonomous_paths;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
@@ -18,11 +18,11 @@ import frc.robot.subsystems.IntakeSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoPath9 extends SequentialCommandGroup {
+public class AutoPath9Mirror extends SequentialCommandGroup {
     /**
      * Creates a trench(3 ball return).
      */
-    public AutoPath9(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem) {
+    public AutoPath9Mirror(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem) {
       // Add your commands in the super() call, e.g.
       // super(new FooCommand(), new BarCommand());
       super(new AutoTurn(driveSubsystem, 27, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
@@ -40,4 +40,3 @@ public class AutoPath9 extends SequentialCommandGroup {
   
     }
   }
-

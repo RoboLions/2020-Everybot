@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -16,6 +15,14 @@ public class AutoMove extends CommandBase {
         private final DriveSubsystem drivesubsystem;
         private double start_dist_meters;
         private double target_distance;
+
+        public AutoMove(final DriveSubsystem subsystem, Mode mode, double distance_in_feet, double speed) {
+                double distance_in_meters = 0.3048 * distance_in_feet;
+                drivesubsystem = subsystem;
+                addRequirements(subsystem);
+                start_dist_meters = drivesubsystem.distanceTravelledinMeters();
+                target_distance = distance_in_meters;
+        }
 
         public AutoMove(final DriveSubsystem subsystem, double distance) {
                 drivesubsystem = subsystem;
@@ -53,5 +60,9 @@ public class AutoMove extends CommandBase {
                 return(positionError < 0.01); // stop whenever we go the commanded distance within 1 cm
                 //return(tempReturn);
         } 
+
+        public enum Mode {
+                DISTANCE, TIME
+        }
 }	
 

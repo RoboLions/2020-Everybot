@@ -4,17 +4,26 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.AutoMove.Mode;
+
 
 /**
  *
  */
-public class IntakeBalls extends CommandBase {
+public class Outtake extends CommandBase {
     private final IntakeSubsystem intakeSubsystem;
-    private final static XboxController manipulatorController = RobotContainer.manipulatorController;
+    private static final int DEFAULT_TIME = 1;
     
-    public IntakeBalls(IntakeSubsystem intake) {
+    public Outtake(IntakeSubsystem intake, Mode mode, int time) {
         intakeSubsystem = intake;
         addRequirements(intakeSubsystem);
+        withTimeout(time);
+      }
+
+      public Outtake(IntakeSubsystem intake) {
+          intakeSubsystem = intake;
+          addRequirements(intakeSubsystem);
+          withTimeout(DEFAULT_TIME);
       }
 
     @Override
@@ -24,14 +33,7 @@ public class IntakeBalls extends CommandBase {
 
     @Override
     public void execute() {
-        boolean start = manipulatorController.getStartButton(); // outtake
-        boolean back = manipulatorController.getBackButton(); // intake
-
-        if(back) {
-            intakeSubsystem.intakeBalls();
-        } else if(start) {
-            intakeSubsystem.outtakeBalls();
-        }
+        intakeSubsystem.outtakeBalls();
     }
 
     @Override

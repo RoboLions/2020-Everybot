@@ -15,12 +15,19 @@ public class AutoTurn extends CommandBase {
   private double initial_heading;
   private double target_heading;
 
-	public AutoTurn(final DriveSubsystem subsystem, double heading) {
+	public AutoTurn(final DriveSubsystem subsystem, double heading, double speed) {
 		drivesubsystem = subsystem;
     addRequirements(subsystem);
     initial_heading = drivesubsystem.getYaw();
     target_heading = heading;
-	}
+  }
+
+  public AutoTurn(final DriveSubsystem subsystem, double heading) {
+		drivesubsystem = subsystem;
+    addRequirements(subsystem);
+    initial_heading = drivesubsystem.getYaw();
+    target_heading = heading;
+  }
 
   // Called when the command is initially scheduled.
   @Override

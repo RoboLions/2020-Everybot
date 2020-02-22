@@ -24,13 +24,6 @@ public class JoystickDrive extends CommandBase {
 
     @Override
     public void execute() {
-        
-    /***********************************************************
-    * Joystick Drive Code to Correct for Joystick Irregularities
-    ************************************************************/
-    double throttle = -driverController.getY(Hand.kLeft);
-    double rotate = -driverController.getX(Hand.kRight);
-
     /** 
     double throttle_sign;
 
@@ -80,26 +73,9 @@ public class JoystickDrive extends CommandBase {
     //driveSubsystem.driveRoboLionsPID(joystick_output, rotate);
     //driveSubsystem.driveRoboLionsPID(joystick_output, 0.0);
     // driveSubsystem.driveRoboLionsPID(remapped_rate, rotate);
-
         
-        // PID Testing Joystick Inputs
-        if (driverController.getY(Hand.kLeft) > 0.2) 
-        {
-            throttle = 0.5;
-        } 
-        else if (driverController.getY(Hand.kLeft) < -0.2) {
-            throttle = -0.5;
-        }
-        else {
-            throttle = 0.0;
-        }
-        rotate = 0.0;
-
-        driveSubsystem.driveRoboLionsPID(throttle, rotate);
-        
-        /*
-        throttle = driverController.getY(Hand.kLeft);
-        rotate = driverController.getX(Hand.kRight);
+        double throttle = driverController.getY(Hand.kLeft);
+        double rotate = driverController.getX(Hand.kRight);
         
         if(throttle > 1) {
             throttle = 1;
@@ -114,9 +90,10 @@ public class JoystickDrive extends CommandBase {
 
         if((rotate > 0 && rotate < 0.25) || (rotate < 0 && rotate > -0.25)) {
             rotate = 0;
-
         }
-        */
+
+        driveSubsystem.driveRoboLionsPID(throttle, rotate);
+        
         // this is the rate curve that we calculated to get the joystick feeling really nice
         /*
         double joystick_target = 3*throttle;//1.458*Math.pow(throttle, 4)-2.0234*Math.pow(throttle, 3)+0.7049*Math.pow(throttle, 2)+0.1116*throttle-0.0203;
