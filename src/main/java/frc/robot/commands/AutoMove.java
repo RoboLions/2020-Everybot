@@ -16,8 +16,8 @@ public class AutoMove extends CommandBase {
         private double start_dist_meters;
         private double target_distance;
 
-        public AutoMove(final DriveSubsystem subsystem, Mode mode, double distance_in_feet, double speed) {
-                double distance_in_meters = 0.3048 * distance_in_feet;
+        public AutoMove(final DriveSubsystem subsystem, Mode mode, double distance_in_inches, double speed) {
+                double distance_in_meters = 0.0254 * distance_in_inches;
                 drivesubsystem = subsystem;
                 addRequirements(subsystem);
                 start_dist_meters = drivesubsystem.distanceTravelledinMeters();

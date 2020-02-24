@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.XboxController;
 /**
  *
  */
-public class IntakeBalls extends CommandBase {
+public class ManualRollIntake extends CommandBase {
     private final IntakeSubsystem intakeSubsystem;
     private final static XboxController manipulatorController = RobotContainer.manipulatorController;
     
-    public IntakeBalls(IntakeSubsystem intake) {
+    public ManualRollIntake(IntakeSubsystem intake) {
         intakeSubsystem = intake;
         addRequirements(intakeSubsystem);
       }
@@ -31,6 +31,8 @@ public class IntakeBalls extends CommandBase {
             intakeSubsystem.intakeBalls();
         } else if(start) {
             intakeSubsystem.outtakeBalls();
+        } else {
+            intakeSubsystem.stop();
         }
     }
 

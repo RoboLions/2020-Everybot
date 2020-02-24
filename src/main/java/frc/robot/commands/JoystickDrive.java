@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -77,11 +78,19 @@ public class JoystickDrive extends CommandBase {
         double throttle = driverController.getY(Hand.kLeft);
         double rotate = driverController.getX(Hand.kRight);
         
+        SlewRateLimiter t_limiter = new SlewRateLimiter(0.5);
+        SlewRateLimiter r_lLimiter = new SlewRateLimiter(0.5); 
+
+       //throttle *= 3;
+       //rotate *= 3;
+       
+       /*
         if(throttle > 1) {
             throttle = 1;
         } else if(throttle < -1) {
             throttle = -1;
         }
+        */
 
         if((throttle > 0 && throttle < 0.25) || (throttle < 0 && throttle > -0.25)) {
             throttle = 0;
@@ -92,7 +101,10 @@ public class JoystickDrive extends CommandBase {
             rotate = 0;
         }
 
-        driveSubsystem.driveRoboLionsPID(throttle, rotate);
+        double new_throttle = t_limiter.calculate(throttle);
+        double new_rotate = r_lLimiter.calculate(rotate);
+
+        driveSubsystem.driveRoboLionsPID(throttle*-2, rotate);
         
         // this is the rate curve that we calculated to get the joystick feeling really nice
         /*

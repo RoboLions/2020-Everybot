@@ -14,13 +14,13 @@ public class Intake extends CommandBase {
     public Intake(IntakeSubsystem intake, Mode mode, int time) {
         intakeSubsystem = intake;
         addRequirements(intakeSubsystem);
-        withTimeout(time);
+       // withTimeout(time);
       }
 
       public Intake(IntakeSubsystem intake) {
           intakeSubsystem = intake;
           addRequirements(intakeSubsystem);
-          withTimeout(DEFAULT_TIME);
+        //  withTimeout(DEFAULT_TIME);
       }
 
     @Override

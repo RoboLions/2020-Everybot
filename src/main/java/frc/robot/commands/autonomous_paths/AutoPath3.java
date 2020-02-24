@@ -9,9 +9,12 @@ package frc.robot.commands.autonomous_paths;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
+import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.AutoMove.Mode;
+import frc.robot.commands.AutoMoveArm.Position;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -22,14 +25,16 @@ public class AutoPath3 extends SequentialCommandGroup {
   /**
    * Creates a far baseline
    */
-  public AutoPath3(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
+  public AutoPath3(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(new AutoMove(driveSubsystem, Mode.DISTANCE, 8.75, 0.6), new AutoTurn(driveSubsystem, -90, 0.6),
     //pass autoline and head towards target zone
         new AutoMove(driveSubsystem, Mode.DISTANCE, 12.5, 0.6), new  AutoTurn(driveSubsystem, 90, 0.6),
         //position to dump
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 1.25, 0.6), new Outtake(intakeSubsystem, Mode.TIME,1)); 
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 1.25, 0.6), new AutoMoveArm(armSubsystem, Position.SCORE),
+        //move and then lower arm
+        new Outtake(intakeSubsystem, Mode.TIME,1)); 
         //dump into bottom port
 }
 }

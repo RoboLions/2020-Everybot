@@ -17,13 +17,13 @@ public class Outtake extends CommandBase {
     public Outtake(IntakeSubsystem intake, Mode mode, int time) {
         intakeSubsystem = intake;
         addRequirements(intakeSubsystem);
-        withTimeout(time);
+        //withTimeout(time);
       }
 
       public Outtake(IntakeSubsystem intake) {
           intakeSubsystem = intake;
           addRequirements(intakeSubsystem);
-          withTimeout(DEFAULT_TIME);
+          //withTimeout(DEFAULT_TIME);
       }
 
     @Override

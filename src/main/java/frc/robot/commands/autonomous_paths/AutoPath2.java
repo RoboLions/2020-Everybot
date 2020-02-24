@@ -9,10 +9,13 @@ package frc.robot.commands.autonomous_paths;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
+import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.AutoMove.Mode;
+import frc.robot.commands.AutoMoveArm.Position;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -23,15 +26,17 @@ public class AutoPath2 extends SequentialCommandGroup {
   /**
    * Creates a new middle baseline
    */
-  public AutoPath2(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
+  public AutoPath2(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     super(new AutoTurn(driveSubsystem, -45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
     //move to lower goal
-        new Outtake(intakeSubsystem, Mode.TIME,1), new AutoTurn(driveSubsystem, 180, 0.6),
-        //dump balls and return to autoline
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6), new AutoTurn(driveSubsystem, 45, 0.6),
+        new AutoMoveArm(armSubsystem, Position.SCORE),new Outtake(intakeSubsystem, Mode.TIME,1), 
+        //position arm and dump powercells
+        new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
+        //turn and return to autoline
+        new AutoTurn(driveSubsystem, 45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
         //head towards randevous point
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6), new Intake(intakeSubsystem, Mode.TIME,1));
-        //suck up POWERCELLS
+        new AutoMoveArm(armSubsystem, Position.GROUND), new Intake(intakeSubsystem, Mode.TIME,1));
+        //lower arm and suck up POWERCELLS
 
 }}

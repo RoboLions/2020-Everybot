@@ -196,6 +196,7 @@ public class DriveSubsystem extends SubsystemBase {
         // speed in meters per second
         // dev bot requires the output to be inverted, everybot needs it to NOT be inverted
         linearTravelSpeed = (1*linearTravelSpeed);
+        rotateSpeed = (rotateSpeed);
         double leftSpeed = (linearTravelSpeed + rotateSpeed);
         double rightSpeed = (linearTravelSpeed - rotateSpeed);
         straightDrive(leftSpeed, rightSpeed);

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ManualMoveArm extends CommandBase {
@@ -30,8 +31,11 @@ public class ManualMoveArm extends CommandBase {
         boolean b = manipulatorController.getBButton();
         // b button = score
 
+        SmartDashboard.putNumber("Pitch", armSubsystem.getPitch());
+
         switch(wrist_motion_state) {
             case 0:
+            
                 armSubsystem.setArmPower(armPower);
                 if(armSubsystem.armPID.deadband_active) {
                     wrist_motion_state = 0;

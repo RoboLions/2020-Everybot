@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ManualMoveArm;
 import frc.robot.commands.ManualMoveClimb;
 import frc.robot.commands.ManualMoveWinch;
@@ -18,7 +19,9 @@ import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoTurn;
-import frc.robot.commands.IntakeBalls;
+import frc.robot.commands.ManualRollIntake;
+import frc.robot.commands.autonomous_paths.AutoPath1;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -38,9 +41,10 @@ public class RobotContainer {
     // The driver's controller
     public static XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
     public static XboxController manipulatorController = new XboxController(OIConstants.MANIPULATOR_CONTROLLER_PORT);
-    
-    public static double manipulatorLeftTriggerValue = manipulatorController.getTriggerAxis(Hand.kLeft);
-    public static double manipulatorRightTriggerValue = manipulatorController.getTriggerAxis(Hand.kRight);
+
+    // Auto Commands
+    //public static AutoPath1 autoPath1 = new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem);
+
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
@@ -65,7 +69,7 @@ public class RobotContainer {
         );
 
         intakeSubsystem.setDefaultCommand(
-            new IntakeBalls(intakeSubsystem)
+            new ManualRollIntake(intakeSubsystem)
         );
     }
 
@@ -84,5 +88,12 @@ public class RobotContainer {
         new JoystickButton(driverController, Button.kBack.value).whenPressed(
             new AutoTurn(driveSubsystem, 20)
         );
-    }  
+        new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
+            new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem)
+        );
+    }
+    
+    public Command getAutonomousCommand() {
+        return null;//autoPath1;
+    }
 }
