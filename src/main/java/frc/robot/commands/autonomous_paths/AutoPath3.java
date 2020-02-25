@@ -12,6 +12,7 @@ import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -28,13 +29,17 @@ public class AutoPath3 extends SequentialCommandGroup {
   public AutoPath3(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 8.75, 0.6), new AutoTurn(driveSubsystem, -90, 0.6),
-    //pass autoline and head towards target zone
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 12.5, 0.6), new  AutoTurn(driveSubsystem, 90, 0.6),
+    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 2.7, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //move straight
+        new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn right
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 3.75, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //move straight
+        new  AutoTurn(driveSubsystem, -90, 0.6), new StopNWait(driveSubsystem, 0.5),
         //position to dump
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 1.25, 0.6), new AutoMoveArm(armSubsystem, Position.SCORE),
-        //move and then lower arm
-        new Outtake(intakeSubsystem, Mode.TIME,1)); 
-        //dump into bottom port
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 0.25, 0.6), new StopNWait(driveSubsystem, 0.5), 
+        //move straight
+        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1)); 
+        //lower arm and then dump into bottom port
 }
 }

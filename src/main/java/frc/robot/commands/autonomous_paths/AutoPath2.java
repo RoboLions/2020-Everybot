@@ -13,6 +13,7 @@ import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -28,15 +29,23 @@ public class AutoPath2 extends SequentialCommandGroup {
    */
   public AutoPath2(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
-    super(new AutoTurn(driveSubsystem, -45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
+    super(new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.5), 
     //move to lower goal
-        new AutoMoveArm(armSubsystem, Position.SCORE),new Outtake(intakeSubsystem, Mode.TIME,1), 
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6), new StopNWait(driveSubsystem, 0.5), 
+        //move straight and then move arm
+        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1), 
         //position arm and dump powercells
-        new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-        //turn and return to autoline
-        new AutoTurn(driveSubsystem, 45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 180, 0.6),
+        // make a u turn
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6),
+        //return to autoline
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, -60, 0.6), 
+        //make a left turm
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6),
         //head towards randevous point
-        new AutoMoveArm(armSubsystem, Position.GROUND), new Intake(intakeSubsystem, Mode.TIME,1));
-        //lower arm and suck up POWERCELLS
-
-}}
+        new StopNWait(driveSubsystem, 0.5), new AutoMoveArm(armSubsystem, Position.GROUND), 
+        //move arm
+        new Intake(intakeSubsystem, Mode.TIME,1));
+        //suck up POWERCELLS
+    }
+}

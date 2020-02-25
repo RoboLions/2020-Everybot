@@ -13,6 +13,7 @@ import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -29,23 +30,39 @@ public class AutoPath4 extends SequentialCommandGroup {
   public AutoPath4(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 8.75, 0.6), new AutoTurn(driveSubsystem, -90, 0.6),
+    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 2.75, 0.6), new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, -90, 0.6),
     //move towards target zone
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 12.5, 0.6), new  AutoTurn(driveSubsystem, 90, 0.6),
+        new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 3.75, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 90, 0.6),
         //position infront of target zone
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 1.25, 0.6), new AutoMoveArm(armSubsystem, Position.SCORE), 
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 0.25, 0.6),
+
+        new StopNWait(driveSubsystem, 0.5), new AutoMoveArm(armSubsystem, Position.SCORE), 
         //move and then
-        new Outtake(intakeSubsystem, Mode.TIME,1), new AutoMove(driveSubsystem, Mode.DISTANCE, -1.25, 0.6),
+        new Outtake(intakeSubsystem, Mode.TIME,1), new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, -1.25, 0.6),
         //dump into bottom port and go back
-        new AutoTurn(driveSubsystem, 90, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 13.75, 0.6),
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 90, 0.6), 
+        
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 3.75, 0.6),
         //position towards to autoline
-        new AutoTurn(driveSubsystem, 90, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 8.75, 0.6),
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 90, 0.6), 
+        
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.7, 0.6),
         //land on the autoline
-        new AutoTurn(driveSubsystem, 45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 45, 0.6), 
+        
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6),
         //land on autoline 
-        new AutoMoveArm(armSubsystem, Position.GROUND), new Intake(intakeSubsystem, Mode.TIME,1),
+        new StopNWait(driveSubsystem, 0.5), new AutoMoveArm(armSubsystem, Position.GROUND), 
+        
+        new Intake(intakeSubsystem, Mode.TIME,1), new StopNWait(driveSubsystem, 0.5),
         // lower arm and collect powercells
-        new AutoTurn(driveSubsystem, 25, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 5, 0.6), 
+        new AutoTurn(driveSubsystem, 25, 0.6), new StopNWait(driveSubsystem, 0.5), 
+        
+        new AutoMove(driveSubsystem, Mode.DISTANCE, 5, 0.6), new AutoMoveArm(armSubsystem, Position.SCORE),
         //move to the target zone
         new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1));
         //lower arm and then dump

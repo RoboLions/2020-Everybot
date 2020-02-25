@@ -13,6 +13,7 @@ import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -29,16 +30,27 @@ public class AutoPath1 extends SequentialCommandGroup {
   public AutoPath1(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 9, 0.6), 
-        //new AutoMoveArm(armSubsystem, Position.SCORE),
-        //move to target zone and lower arm
-        new Outtake(intakeSubsystem).withTimeout(1), new AutoTurn(driveSubsystem, 180, 0.6),
+    super(new AutoMove(driveSubsystem, 2.8), 
+    new StopNWait(driveSubsystem, 0.5),
+        //move straight
+        //new AutoMoveArm(armSubsystem, Position.SCORE), 
+        new StopNWait(driveSubsystem, 0.3), 
+        new Outtake(intakeSubsystem).withTimeout(1)
+        ); 
+        //move to target zone and lower arm 
+        /*new AutoTurn(driveSubsystem, 180, 0.6),
         //dump and then turn around
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 9, 0.6), new AutoTurn(driveSubsystem, 45, 0.6),
-        //head to autoline and turn 
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 9, 0.6), new AutoTurn(driveSubsystem, -45, 0.6),
-        //turn left and head to trench
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 14, 0.6), new Intake(intakeSubsystem, Mode.TIME, 1).withTimeout(1)); 
-        //go further into the trench and suck up powercells
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6), 
+        //go straight
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, -45, 0.6),
+        //turn left 
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6),
+        //move straight
+        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 45, 0.6),
+        //enter the trench
+        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 4.4, 0.6),
+        //continue drivng through the trench
+        new AutoMoveArm(armSubsystem, Position.GROUND), new Intake(intakeSubsystem, Mode.TIME, 1).withTimeout(1)); 
+        //move arm down and suck in powercells*/
   }
 }

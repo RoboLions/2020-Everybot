@@ -20,6 +20,8 @@ import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.ManualRollIntake;
+import frc.robot.commands.AutonomousPaths.TestPath;
+import frc.robot.commands.AutonomousPaths.TestPath;
 import frc.robot.commands.autonomous_paths.AutoPath1;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -43,7 +45,8 @@ public class RobotContainer {
     public static XboxController manipulatorController = new XboxController(OIConstants.MANIPULATOR_CONTROLLER_PORT);
 
     // Auto Commands
-    //public static AutoPath1 autoPath1 = new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem);
+    public static AutoPath1 autoPath1 = new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem);
+    public static TestPath nearTrenchPath = new TestPath(driveSubsystem, intakeSubsystem, armSubsystem);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -94,6 +97,6 @@ public class RobotContainer {
     }
     
     public Command getAutonomousCommand() {
-        return null;//autoPath1;
+        return nearTrenchPath;
     }
 }
