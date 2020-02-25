@@ -63,6 +63,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Right Encoder Counts", m_robotContainer.driveSubsystem.getRightEncoderPosition());
     SmartDashboard.putNumber("Left Dist Meters", m_robotContainer.driveSubsystem.leftDistanceTravelledInMeters());
     SmartDashboard.putNumber("Right Dist Meters", m_robotContainer.driveSubsystem.rightDistanceTravelledInMeters());
+    SmartDashboard.putNumber("Temp Left F500", RobotMap.leftDriveMotor.getTemperature());
+    SmartDashboard.putNumber("Temp Right F500", RobotMap.rightDriveMotor.getTemperature());
+    SmartDashboard.putNumber("Left Motor Voltage", RobotMap.leftDriveMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Right Motor Voltage", RobotMap.rightDriveMotor.getMotorOutputVoltage());
   }
 
   @Override

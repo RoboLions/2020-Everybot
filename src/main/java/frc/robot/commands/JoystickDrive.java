@@ -104,7 +104,7 @@ public class JoystickDrive extends CommandBase {
         double new_throttle = t_limiter.calculate(throttle);
         double new_rotate = r_lLimiter.calculate(rotate);
 
-        driveSubsystem.driveRoboLionsPID(throttle*-2, rotate);
+        driveSubsystem.driveRoboLionsPID(-throttle*2.5, rotate);
         
         // this is the rate curve that we calculated to get the joystick feeling really nice
         /*

@@ -14,18 +14,20 @@ public class ArmSubsystem extends SubsystemBase {
     private final WPI_TalonSRX armMotor = RobotMap.armMotor;
     public RoboLionsPID armPID = new RoboLionsPID();
     private final PigeonIMU imu = RobotMap.arm_imu;
-    public static double MAX_ARM_POWER = 0.3; // hard deadband as to what the maximum possible command is
+    public static double MAX_ARM_POWER = 0.5; //0.3; // hard deadband as to what the maximum possible command is
 
     public double arm_pitch_readout = 0;
 
     public ArmSubsystem() {
         armMotor.setNeutralMode(NeutralMode.Brake);
-        armPID.initialize(ArmConstants.kP, // Proportional Gain
+        armPID.initialize2(ArmConstants.kP, // Proportional Gain
                             ArmConstants.kI, // Integral Gain
                             ArmConstants.kD, // Derivative Gain
                             5, // Cage Limit
                             1, // Deadband
-                            MAX_ARM_POWER // MaxOutput
+                            MAX_ARM_POWER, // MaxOutput
+                            false,
+                            true
         );
     }
 

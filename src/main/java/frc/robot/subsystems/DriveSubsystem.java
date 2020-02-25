@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.lib.RoboLionsMotionProfile;
 import frc.robot.lib.RoboLionsPID;
@@ -175,8 +176,6 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("rightSpeed", rightSpeed);
         SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
         SmartDashboard.putNumber("Right Encoder V", getRightEncoderVelocityMetersPerSecond());
-        SmartDashboard.putNumber("Left Motor Voltage", leftMotor.getMotorOutputVoltage());
-        SmartDashboard.putNumber("Right Motor Voltage", rightMotor.getMotorOutputVoltage());
         SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
         SmartDashboard.putNumber("Left Encoder Counts", getLeftEncoderPosition());
         SmartDashboard.putNumber("Right Encoder Counts", getRightEncoderPosition());

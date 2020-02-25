@@ -28,7 +28,7 @@ public final class Constants {
     public static final double kD = 0.00288;
 
     public static final double GROUND_POSITION = 0;
-    public static final double SCORE_POSITION = -50;//56;
+    public static final double SCORE_POSITION = 50;//56;
   }
 
   public static final class ClimbConstants {

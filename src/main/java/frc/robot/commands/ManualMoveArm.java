@@ -35,7 +35,6 @@ public class ManualMoveArm extends CommandBase {
 
         switch(wrist_motion_state) {
             case 0:
-            
                 armSubsystem.setArmPower(armPower);
                 if(armSubsystem.armPID.deadband_active) {
                     wrist_motion_state = 0;

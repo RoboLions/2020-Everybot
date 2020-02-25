@@ -68,7 +68,7 @@ public class RoboLionsPID {
   
     deltaTime = 0.02;
 
-    deadband_active = false;
+    deadband_active = false; // TODO Change ARM PID to Initialize2 so that we can set deadband
 
     enableCage = true;
     enableDeadBand = true;
