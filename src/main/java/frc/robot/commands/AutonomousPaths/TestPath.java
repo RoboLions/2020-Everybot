@@ -30,11 +30,14 @@ public class TestPath extends SequentialCommandGroup {
   public TestPath(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());  
-    super(new AutoMove(driveSubsystem, 1),
-    new StopNWait(driveSubsystem, 0.5),
+    super(new AutoMove(driveSubsystem, 3),
+      new AutoTurn(driveSubsystem, 180),
+      new AutoMove(driveSubsystem, 3));
+      /*,new StopNWait(driveSubsystem, 0.3),
       new AutoTurn(driveSubsystem, -20),
-      new StopNWait(driveSubsystem, 0.5),
+      new StopNWait(driveSubsystem, 0.3),
       new AutoMove(driveSubsystem, 1));
+      */
         //new Intake(intakeSubsystem).withTimeout(1),
         //new AutoMoveArm(armSubsystem, Position.GROUND),
         //new AutoMove(driveSubsystem, 1));

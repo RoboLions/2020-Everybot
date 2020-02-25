@@ -78,8 +78,8 @@ public class JoystickDrive extends CommandBase {
         double throttle = driverController.getY(Hand.kLeft);
         double rotate = driverController.getX(Hand.kRight);
         
-        SlewRateLimiter t_limiter = new SlewRateLimiter(0.5);
-        SlewRateLimiter r_lLimiter = new SlewRateLimiter(0.5); 
+        // SlewRateLimiter t_limiter = new SlewRateLimiter(0.5);
+        // SlewRateLimiter r_lLimiter = new SlewRateLimiter(0.5); 
 
        //throttle *= 3;
        //rotate *= 3;
@@ -101,10 +101,21 @@ public class JoystickDrive extends CommandBase {
             rotate = 0;
         }
 
-        double new_throttle = t_limiter.calculate(throttle);
-        double new_rotate = r_lLimiter.calculate(rotate);
+        throttle = (Math.tan(.465 * (throttle * Math.PI))) / 3;
 
-        driveSubsystem.driveRoboLionsPID(-throttle*2.5, rotate);
+        // double new_throttle = t_limiter.calculate(throttle);
+        // double new_rotate = r_lLimiter.calculate(rotate);
+
+        // The speed limit is a multiple of throttle
+        // Speed Limit = 2.5 meters per second
+
+        // Slow Mo Button
+        if (driverController.getAButton()) {
+            throttle = 0.1;
+        }
+
+        driveSubsystem.driveRoboLionsPID(-throttle, rotate);
+        //driveSubsystem.driveRoboLionsPID(-throttle*2.5, rotate);
         
         // this is the rate curve that we calculated to get the joystick feeling really nice
         /*

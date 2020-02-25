@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
+import frc.robot.lib.RoboLionsPID;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -25,6 +26,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
+  private RoboLionsPID leftDrivetrainPID = m_robotContainer.driveSubsystem.leftForwardPID;
+  private RoboLionsPID rightDrivetrainPID = m_robotContainer.driveSubsystem.rightForwardPID;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -77,7 +80,29 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    
+                // Autonomous PID
+                leftDrivetrainPID.initialize2(
+                  2, // Proportional Gain //2.925 ZN w FF 
+                  20, // Integral Gain //42.12 ZN w FF
+                  0.0, // Derivative Gain //0
+                  0.0, // Cage Limit 0.3 //0
+                  0.0, // Deadband //0
+                  12,// MaxOutput Volts 0.25 //100 //12
+                  false, //enableCage
+                  false //enableDeadband
+              );
+      
+              // Autonomous PID
+              rightDrivetrainPID.initialize2(
+                  2, // Proportional Gain //2.925 ZN w FF //2
+                  20, // Integral Gain //42.12 ZN w FF //20
+                  0.0, // Derivative Gain //0
+                  0.0, // Cage Limit //0.3
+                  0.0, // Deadband //0
+                  12,// MaxOutput Volts 0.25 //100 //12
+                  false, //enableCage
+                  false //enableDeadband
+              );
   }
 
   /**
@@ -95,6 +120,30 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.driveSubsystem.resetEncoders();
     m_robotContainer.driveSubsystem.ZeroYaw();
+
+            // Rate Drive PID
+            leftDrivetrainPID.initialize2(
+              0, // Proportional Gain //2.925 ZN w FF 
+              0, // Integral Gain //42.12 ZN w FF
+              0.0, // Derivative Gain //0
+              0.0, // Cage Limit 0.3 //0
+              0.0, // Deadband //0
+              12,// MaxOutput Volts 0.25 //100 //12
+              false, //enableCage
+              false //enableDeadband
+          );
+  
+          // Rate Drive PID
+          rightDrivetrainPID.initialize2(
+              0, // Proportional Gain //2.925 ZN w FF //2
+              0, // Integral Gain //42.12 ZN w FF //20
+              0.0, // Derivative Gain //0
+              0.0, // Cage Limit //0.3
+              0.0, // Deadband //0
+              12,// MaxOutput Volts 0.25 //100 //12
+              false, //enableCage
+              false //enableDeadband
+          );
   }
 
   /**

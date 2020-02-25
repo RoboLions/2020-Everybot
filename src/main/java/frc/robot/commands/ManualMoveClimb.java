@@ -62,7 +62,7 @@ public class ManualMoveClimb extends CommandBase {
                     climb_motion_state = 2;
                 }
                 if(a) {
-                    climb_motion_state = 3;
+                    climb_motion_state = 0; // should be 3 but we need button A for Slo-Mo so this is what we're doing
                 }
                 if(y) {
                     climb_motion_state = 4;

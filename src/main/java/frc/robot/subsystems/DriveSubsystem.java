@@ -80,37 +80,37 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Rate Drive PID
         leftForwardPID.initialize2(
-            2.925, // Proportional Gain //2.925 ZN w FF
-            42.12, // Integral Gain //42.12 ZN w FF
+            0, // Proportional Gain //2.925 ZN w FF 
+            0, // Integral Gain //42.12 ZN w FF
             0.0, // Derivative Gain //0
             0.0, // Cage Limit 0.3 //0
             0.0, // Deadband //0
-            12,// MaxOutput Volts 0.25 //100
+            12,// MaxOutput Volts 0.25 //100 //12
             false, //enableCage
             false //enableDeadband
         );
 
         // Rate Drive PID
         rightForwardPID.initialize2(
-            2, // Proportional Gain //2.925 ZN w FF
-            20, // Integral Gain //42.12 ZN w FF
+            0, // Proportional Gain //2.925 ZN w FF //2
+            0, // Integral Gain //42.12 ZN w FF //20
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3
             0.0, // Deadband //0
-            12,// MaxOutput Volts 0.25 //100
+            12,// MaxOutput Volts 0.25 //100 //12
             false, //enableCage
             false //enableDeadband
         );
 
         // Position Command PID for Autonomous and 
         positionPID.initialize2(
-            2, // Proportional Gain //1.35
-            10, // Integral Gain //5
+            3, // Proportional Gain //1.35 //2
+            10, // Integral Gain //5 //10
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3 //0.1 //0.2
             0.0, // Deadband //0
             2.0,// MaxOutput Meters/sec 0.25 //100 //1
-            false, //enableCage
+            true, //enableCage
             false //enableDeadband
         );
 
@@ -174,8 +174,10 @@ public class DriveSubsystem extends SubsystemBase {
         /*
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
         SmartDashboard.putNumber("rightSpeed", rightSpeed);
+        */
         SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
         SmartDashboard.putNumber("Right Encoder V", getRightEncoderVelocityMetersPerSecond());
+        /*
         SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
         SmartDashboard.putNumber("Left Encoder Counts", getLeftEncoderPosition());
         SmartDashboard.putNumber("Right Encoder Counts", getRightEncoderPosition());
@@ -279,6 +281,11 @@ public class DriveSubsystem extends SubsystemBase {
         return (rightVelocityMPS);
     }
 
+    public double getAverageEncoderVelocityMetersPerSecond() {
+        double velocityMPS = (getRightEncoderVelocityMetersPerSecond()+getLeftEncoderVelocityMetersPerSecond())*0.5;
+        return (velocityMPS);
+    }
+
     public double leftDistanceTravelledInMeters() {
         double left_dist = getLeftEncoderPosition() * METERS_PER_TICKS;
         return left_dist;
@@ -325,10 +332,10 @@ public class DriveSubsystem extends SubsystemBase {
             positionMotionProfile.init(
                         start_dist, //start position
                         distance, // target position
-                        1.5, // max vel 
-                        1.0, // max accel
+                        1, // max vel //1.5
+                        0.5, // max accel //1
                         0.02, // execution period 
-                        2.0 // deceleration
+                        0.5 // deceleration //2
             );
             state_flag_motion_profile = false;
         }
@@ -348,10 +355,11 @@ public class DriveSubsystem extends SubsystemBase {
         //SmartDashboard.putNumber("Auto Distance", position_feedback);
         // positionError is in meters per second
         double positionError = positionPID.execute(position_profile_command, position_feedback);
+        double positionCmdOut = (positionError+feed_forward_rate);
 
-        //System.out.println("Command: " + position_profile_command);
-        //System.out.println("Feedback: " + position_feedback);
-        //System.out.println("PID Error: " + positionError);
+        System.out.println("Cmd: " + position_profile_command + "Fb: " + position_feedback + "Vel: " + getAverageEncoderVelocityMetersPerSecond());
+        // System.out.println("Feedback: " + position_feedback);
+        // System.out.println("PID Error: " + positionError);
         //System.out.println("\n");
 
         // left_speed = output;

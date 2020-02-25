@@ -21,7 +21,6 @@ import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.ManualRollIntake;
 import frc.robot.commands.AutonomousPaths.TestPath;
-import frc.robot.commands.AutonomousPaths.TestPath;
 import frc.robot.commands.autonomous_paths.AutoPath1;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -93,6 +92,7 @@ public class RobotContainer {
         );
         new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
             new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem)
+            // new TestPath(driveSubsystem, intakeSubsystem, armSubsystem)
         );
     }
     

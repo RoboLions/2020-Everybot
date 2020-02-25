@@ -31,10 +31,10 @@ public class AutoPath1 extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(new AutoMove(driveSubsystem, 2.8), 
-    new StopNWait(driveSubsystem, 0.5),
+        //new StopNWait(driveSubsystem, 0.5),
         //move straight
         //new AutoMoveArm(armSubsystem, Position.SCORE), 
-        new StopNWait(driveSubsystem, 0.3), 
+        // new StopNWait(driveSubsystem, 0.3), 
         new Outtake(intakeSubsystem).withTimeout(1)
         ); 
         //move to target zone and lower arm 
