@@ -29,17 +29,17 @@ public class AutoPath3Mirror extends SequentialCommandGroup {
   public AutoPath3Mirror(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 2.7, 0.6), new StopNWait(driveSubsystem, 0.5),
+    super(new AutoMove(driveSubsystem, 2.7), new StopNWait(driveSubsystem, 0.5),
         //move straight
         new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
         //turn right
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 3.75, 0.6), new StopNWait(driveSubsystem, 0.5),
+        new AutoMove(driveSubsystem, 3.75), new StopNWait(driveSubsystem, 0.5),
         //move straight
-        new  AutoTurn(driveSubsystem, -90, 0.6), new StopNWait(driveSubsystem, 0.5),
+        new AutoTurn(driveSubsystem, -90, 0.6), new StopNWait(driveSubsystem, 0.5),
         //position to dump
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 0.25, 0.6), new StopNWait(driveSubsystem, 0.5), 
+        new AutoMove(driveSubsystem, 0.25), new StopNWait(driveSubsystem, 0.5), 
         //move straight
-        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1)); 
-        //lower arm and then dump into bottom port
-}
+        new Outtake(intakeSubsystem).withTimeout(1));  
+        //lower arm and then dump into bottom port      
+  }
 }

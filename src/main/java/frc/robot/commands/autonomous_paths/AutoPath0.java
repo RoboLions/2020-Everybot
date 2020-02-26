@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
+import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
@@ -22,24 +23,15 @@ import frc.robot.subsystems.IntakeSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutoPath3 extends SequentialCommandGroup {
+public class AutoPath0 extends SequentialCommandGroup {
   /**
-   * Creates a far baseline
+   * Creates a new Trench baseline
    */
-  public AutoPath3(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
+  public AutoPath0(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, 2.7), new StopNWait(driveSubsystem, 0.5),
-        //move straight
-        new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //turn right
-        new AutoMove(driveSubsystem, 3.75), new StopNWait(driveSubsystem, 0.5),
-        //move straight
-        new AutoTurn(driveSubsystem, -90, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //position to dump
-        new AutoMove(driveSubsystem, 0.25), new StopNWait(driveSubsystem, 0.5), 
-        //move straight
-        new Outtake(intakeSubsystem).withTimeout(1));  
-        //lower arm and then dump into bottom port      
+    super(new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.5),
+        //move straight 
+        new Outtake(intakeSubsystem).withTimeout(1));
   }
 }

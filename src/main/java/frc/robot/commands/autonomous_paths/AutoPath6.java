@@ -15,6 +15,7 @@ import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -29,15 +30,21 @@ public class AutoPath6 extends SequentialCommandGroup {
   public AutoPath6(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoTurn(driveSubsystem, 10, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-    //position to bottom port
-        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1), 
-        //lower arm and use outtake
-        new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 20, 0.6),
-        //turn around and then move
-        new AutoTurn(driveSubsystem, 45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
+    super(new AutoTurn(driveSubsystem, 2.85, 0.6), new StopNWait(driveSubsystem, 0.3),
+    //move straight
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5),
+        //use outtake
+        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.5), 
+        //make a 180 turn
+        new AutoMove(driveSubsystem,5.9), new StopNWait(driveSubsystem, 0.5),
+        //move straight
+        new AutoTurn(driveSubsystem, 45, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn right
+        new AutoMove(driveSubsystem, 2), new StopNWait(driveSubsystem, 0.5),
         //go to trench run
-        new AutoMoveArm(armSubsystem, Position.SCORE), new Intake(intakeSubsystem, Mode.TIME,1));
-        // lower arm and suck in ball
+        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.3),
+        //lower arm
+        new Intake(intakeSubsystem).withTimeout(1));
+        // suck in powercells
   }
 }

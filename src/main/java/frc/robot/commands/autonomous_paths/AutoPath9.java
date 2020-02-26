@@ -12,6 +12,8 @@ import frc.robot.commands.AutoMove;
 import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
+import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -28,20 +30,35 @@ public class AutoPath9 extends SequentialCommandGroup {
     public AutoPath9(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
       // Add your commands in the super() call, e.g.
       // super(new FooCommand(), new BarCommand());
-      super(new AutoTurn(driveSubsystem, 27, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-      //position towards to the bottom port
-          new AutoMoveArm(armSubsystem, Position.GROUND), new Intake(intakeSubsystem, Mode.TIME,1), new AutoTurn(driveSubsystem, 180, 0.6),
-          //lower arm then dump
-          new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE,25, 0.6), new AutoTurn(driveSubsystem, -45, 0.6), 
-          //make a 180 and then head foward
-          new AutoTurn(driveSubsystem, -45, 0.6), new AutoMoveArm(armSubsystem, Position.GROUND), 
-          //turn and then lower arm
-          new Intake(intakeSubsystem, Mode.TIME,1), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
+      super(new AutoTurn(driveSubsystem, -27, 0.6), new StopNWait(driveSubsystem, 0.5),
+      // turn left
+          new AutoMove(driveSubsystem, 2.85), new StopNWait(driveSubsystem, 0.3),
+          //go straight
+          new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3), 
+          //outtake powercells
+          new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.5),
+          //make a 180
+          new AutoMove(driveSubsystem, 6.9), new StopNWait(driveSubsystem, 0.5),
+          //move straight
+          new AutoTurn(driveSubsystem, 45, 0.6), new StopNWait(driveSubsystem, 0.5),
+          //turn right
+          new AutoMove(driveSubsystem, 0.5), new StopNWait(driveSubsystem, 0.5),
+          //move a little
+          new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.5),
+          //lower arm
+          new Intake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5),
+          //
+          new AutoMove(driveSubsystem, 1.5), new StopNWait(driveSubsystem, 0.5),
+          //go straiti
+          
+          new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
+          //
+          new AutoMove(driveSubsystem, 1.5), new StopNWait(driveSubsystem, 0.5),
           //pick up balls
-          new AutoTurn(driveSubsystem, 90, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 5, 0.6),
+          new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
+          //
+          new AutoMove(driveSubsystem, 2.85), new StopNWait(driveSubsystem, 0.5));
           //start to make a u turn
-          new AutoTurn(driveSubsystem, 90, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 8.75, 0.6));
-          //complete the u turn
-    }
-  }
 
+  }
+}

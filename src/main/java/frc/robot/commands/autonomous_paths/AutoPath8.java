@@ -13,6 +13,7 @@ import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -29,15 +30,21 @@ public class AutoPath8 extends SequentialCommandGroup {
   public AutoPath8(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoTurn(driveSubsystem, 45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-    //turn then move
-        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1),
-        // lower arm then use outtake
-        new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 25, 0.6),
-        //dump balls then make a u-turn
-        new AutoTurn(driveSubsystem, 45, 0.6), new AutoMoveArm(armSubsystem, Position.GROUND),
+    super(new AutoTurn(driveSubsystem, -45, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn left
+        new AutoMove(driveSubsystem, 2.85), new StopNWait(driveSubsystem, 0.5),
+        //go straight
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5),
+        //use outtake
+        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //iniate u turn
+        new AutoMove(driveSubsystem, 5.9), new StopNWait(driveSubsystem, 0.5),
+        //go straight
+        new AutoTurn(driveSubsystem, 45, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn right
+        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.5),
         //head to trench
-        new Intake(intakeSubsystem, Mode.TIME,1), new AutoMove(driveSubsystem, Mode.DISTANCE, 5, 0.6));
-        //move while sucking balls in
+        new Intake(intakeSubsystem).withTimeout(1),new AutoMove(driveSubsystem, 5));
+        //move while sucking balls
   }
 }

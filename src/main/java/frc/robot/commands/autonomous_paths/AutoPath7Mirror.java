@@ -13,6 +13,7 @@ import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -29,15 +30,23 @@ public class AutoPath7Mirror extends SequentialCommandGroup {
   public AutoPath7Mirror(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoTurn(driveSubsystem, 45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-    //position towards the target zone
-        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1), 
-        //lower arm and dump powercells
-        new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 25, 0.6),
-        //dump and then turn around 
-        new AutoMoveArm(armSubsystem, Position.GROUND), new Intake(intakeSubsystem, Mode.TIME,1), 
+    super(new AutoTurn(driveSubsystem, -45, 0.6), new StopNWait(driveSubsystem, 0.5),
+    //turn left
+        new AutoMove(driveSubsystem,2.85), new StopNWait(driveSubsystem, 0.5),
+        //go straight
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5), 
+        //dump powercells
+        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //make a u turn
+        new AutoMove(driveSubsystem, 5.9), new StopNWait(driveSubsystem, 0.5),
+        //go straight
+        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.5), 
+        //lower arm
+        new Intake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5), 
         //lower arm and suck in balls
-        new AutoTurn(driveSubsystem, -45, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6));
+        new AutoTurn(driveSubsystem, 45, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn right
+        new AutoMove(driveSubsystem, 2));
         //begin to turn around
   }
 }

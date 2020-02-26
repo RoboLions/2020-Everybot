@@ -30,21 +30,27 @@ public class AutoPath1Mirror extends SequentialCommandGroup {
   public AutoPath1Mirror(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6), new AutoMoveArm(armSubsystem, Position.SCORE),
+    super(new AutoMove(driveSubsystem,2.8), new StopNWait(driveSubsystem, 0.5),
+        //move straight 
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
         //move to target zone and lower arm
-        new Outtake(intakeSubsystem).withTimeout(1), new AutoTurn(driveSubsystem, 180, 0.6),
+        new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.3),
+        //back up
+        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.5),
         //dump and then turn around
-        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6), 
+        new AutoMove(driveSubsystem, 2.3), new StopNWait(driveSubsystem, 0.5),
         //go straight
-        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, -45, 0.6),
-        //turn left 
-        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6),
+        new AutoTurn(driveSubsystem, 80, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn right
+        new AutoMove(driveSubsystem, 5.3), new StopNWait(driveSubsystem, 0.5),
         //move straight
-        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 45, 0.6),
+        new AutoTurn(driveSubsystem, 50, 0.6), new StopNWait(driveSubsystem, 0.5),
         //enter the trench
-        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 4.4, 0.6),
+       new AutoMove(driveSubsystem, 1), new StopNWait(driveSubsystem, 0.5),
         //continue drivng through the trench
-        new AutoMoveArm(armSubsystem, Position.GROUND), new Intake(intakeSubsystem, Mode.TIME, 1).withTimeout(1)); 
-        //move arm down and suck in powercells
+        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.3),  
+        //move arm down
+        new Intake(intakeSubsystem).withTimeout(1)); 
+        //suck powercells
   }
 }

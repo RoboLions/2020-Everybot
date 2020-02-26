@@ -30,41 +30,43 @@ public class AutoPath4 extends SequentialCommandGroup {
   public AutoPath4(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, Mode.DISTANCE, 2.75, 0.6), new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, -90, 0.6),
-    //move towards target zone
+    super(new AutoMove(driveSubsystem, 2.5), new StopNWait(driveSubsystem, 0.5),
+        //go straight
         new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 3.75, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //
-        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 90, 0.6),
-        //position infront of target zone
-        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 0.25, 0.6),
-
-        new StopNWait(driveSubsystem, 0.5), new AutoMoveArm(armSubsystem, Position.SCORE), 
-        //move and then
-        new Outtake(intakeSubsystem, Mode.TIME,1), new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, -1.25, 0.6),
-        //dump into bottom port and go back
-        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 90, 0.6), 
-        
-        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 3.75, 0.6),
-        //position towards to autoline
-        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 90, 0.6), 
-        
-        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.7, 0.6),
-        //land on the autoline
-        new StopNWait(driveSubsystem, 0.5), new AutoTurn(driveSubsystem, 45, 0.6), 
-        
-        new StopNWait(driveSubsystem, 0.5), new AutoMove(driveSubsystem, Mode.DISTANCE, 2.9, 0.6),
-        //land on autoline 
-        new StopNWait(driveSubsystem, 0.5), new AutoMoveArm(armSubsystem, Position.GROUND), 
-        
-        new Intake(intakeSubsystem, Mode.TIME,1), new StopNWait(driveSubsystem, 0.5),
-        // lower arm and collect powercells
-        new AutoTurn(driveSubsystem, 25, 0.6), new StopNWait(driveSubsystem, 0.5), 
-        
-        new AutoMove(driveSubsystem, Mode.DISTANCE, 5, 0.6), new AutoMoveArm(armSubsystem, Position.SCORE),
-        //move to the target zone
-        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1));
-        //lower arm and then dump
-}
+        //turn right
+        new AutoMove(driveSubsystem, 4.8), new StopNWait(driveSubsystem, 0.5),
+        // move straight to the target zone
+        new AutoTurn(driveSubsystem, -90, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn left
+        new AutoMove(driveSubsystem, 0.25), new StopNWait(driveSubsystem, 0.5),
+        //adjust position
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
+        //dump balls
+        new AutoMove(driveSubsystem, -0.25), new StopNWait(driveSubsystem, 0.5),
+        //move back
+        new AutoTurn(driveSubsystem, -165, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //make u turn
+        new AutoMove(driveSubsystem, 6.9), new StopNWait(driveSubsystem, 0.5),
+        //move to rendevous
+        new Intake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
+        //intake balls
+        new AutoTurn(driveSubsystem, 105, 0.6),new StopNWait(driveSubsystem, 0.5),
+        //turn right
+        new AutoMove(driveSubsystem, 2.75), new StopNWait(driveSubsystem, 0.3),  
+        //move straight
+        new AutoTurn(driveSubsystem, -45, 0.6),new StopNWait(driveSubsystem, 0.5),
+        //turn left and face the loading zone
+        new AutoMove(driveSubsystem, 2.5), new StopNWait(driveSubsystem, 0.3),  
+        //move straight
+        new AutoTurn(driveSubsystem, 90, 0.6),new StopNWait(driveSubsystem, 0.5),
+        //turn left and face the loading zone
+        new AutoMove(driveSubsystem, 6.9), new StopNWait(driveSubsystem, 0.5),
+        // move straight to the target zone
+        new AutoTurn(driveSubsystem, -90, 0.6),new StopNWait(driveSubsystem, 0.5),
+        //turn left and face the loading zone
+        new AutoMove(driveSubsystem, 0.25), new StopNWait(driveSubsystem, 0.5),
+        // move straight to the target zone
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3)); 
+        //dump into bottom port and go back    
+  }
 }
