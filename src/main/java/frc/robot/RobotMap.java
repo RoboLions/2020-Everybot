@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.wpilibj.Encoder;
+
 public class RobotMap {
     public static final int LEFT_DRIVE_PORT = 1;
     public static final int RIGHT_DRIVE_PORT = 2;
@@ -26,6 +28,4 @@ public class RobotMap {
 
     public static PigeonIMU arm_imu = new PigeonIMU(ARM_IMU_PORT);
     public static PigeonIMU drive_imu = new PigeonIMU(climberMotor);
-
-
 }

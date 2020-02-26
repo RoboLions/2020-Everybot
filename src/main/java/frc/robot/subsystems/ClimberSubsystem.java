@@ -17,7 +17,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public ClimberSubsystem() {
         climbMotor.setNeutralMode(NeutralMode.Brake);
-        climbMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        climbMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         resetEncoder();
         climbPID.initialize(ClimbConstants.kP, // Proportional Gain
                             ClimbConstants.kI, // Integral Gain
