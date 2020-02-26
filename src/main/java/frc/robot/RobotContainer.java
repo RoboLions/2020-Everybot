@@ -24,6 +24,7 @@ import frc.robot.commands.ManualRollIntake;
 import frc.robot.commands.UpMoveClimb;
 import frc.robot.commands.AutonomousPaths.TestPath;
 import frc.robot.commands.autonomous_paths.AutoPath1;
+import frc.robot.commands.autonomous_paths.AutoPath2;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -95,18 +96,10 @@ public class RobotContainer {
         );
         */
 
-        //Telescoping arm manual up and down
-        new JoystickButton(driverController, Button.kBumperLeft.value).whenPressed(
-            new UpMoveClimb(climberSubsystem)
-        );
-        new JoystickButton(driverController, Button.kBumperRight.value).whenPressed(
-            new DownMoveClimb(climberSubsystem)
-        );
-
         /*** MANIPULATOR CONTROLLER***/
         new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
-            new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem)
-            // new TestPath(driveSubsystem, intakeSubsystem, armSubsystem)
+            new AutoPath2(driveSubsystem, intakeSubsystem, armSubsystem)
+            //new TestPath(driveSubsystem, intakeSubsystem, armSubsystem)
         );
 
     }

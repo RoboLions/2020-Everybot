@@ -55,6 +55,9 @@ public class DriveSubsystem extends SubsystemBase {
     public RoboLionsMotionProfile positionMotionProfile = new RoboLionsMotionProfile();
     public RoboLionsMotionProfile headingMotionProfile = new RoboLionsMotionProfile();
 
+    public double left_speed_cmd;
+    public double right_speed_cmd;
+
 
     public DriveSubsystem() {
         ZeroYaw();
@@ -80,8 +83,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Rate Drive PID
         leftForwardPID.initialize2(
-            0, // Proportional Gain //2.925 ZN w FF 
-            0, // Integral Gain //42.12 ZN w FF
+            2, // Proportional Gain //2.925 ZN w FF 
+            20, // Integral Gain //42.12 ZN w FF
             0.0, // Derivative Gain //0
             0.0, // Cage Limit 0.3 //0
             0.0, // Deadband //0
@@ -92,8 +95,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Rate Drive PID
         rightForwardPID.initialize2(
-            0, // Proportional Gain //2.925 ZN w FF //2
-            0, // Integral Gain //42.12 ZN w FF //20
+            2, // Proportional Gain //2.925 ZN w FF //2
+            20, // Integral Gain //42.12 ZN w FF //20
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3
             0.0, // Deadband //0
@@ -109,19 +112,19 @@ public class DriveSubsystem extends SubsystemBase {
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3 //0.1 //0.2
             0.0, // Deadband //0
-            2.0,// MaxOutput Meters/sec 0.25 //100 //1
+            2.5,// MaxOutput Meters/sec 0.25 //100 //1
             true, //enableCage
             false //enableDeadband
         );
 
         // Heading Command PID for Autonomous and 
         headingPID.initialize2(
-            9, // Proportional Gain //15 // 7.5
-            10.0, // Integral Gain // 10
+            10, // Proportional Gain //15 // 7.5
+            30.0, // Integral Gain // 10
             0.0, // Derivative Gain 
-            0.0, // Cage Limit //0.3
+            20, // Cage Limit //0.3
             0.0, // Deadband
-            180, // MaxOutput Degrees/sec 0.25 //100 
+            360, // MaxOutput Degrees/sec 0.25 //100 //180
             true, //enableCage
             false //enableDeadband
         );
@@ -136,6 +139,9 @@ public class DriveSubsystem extends SubsystemBase {
     * 2/15/20 Use this for anything that has to deal with closed loop rate control
     ******************************************************************************/
     public void straightDrive(double leftSpeed, double rightSpeed) {
+        left_speed_cmd = leftSpeed;
+        right_speed_cmd = rightSpeed;
+        
         final double leftFeedforward = calculateNew(leftSpeed, 0, 0.7, 3, 0); // ks=0.8, kv=0.5
         final double rightFeedforward = calculateNew(rightSpeed, 0, 0.7, 3, 0);
 
@@ -147,7 +153,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         double leftOutput = leftForwardPID.execute(leftSpeed, getLeftEncoderVelocityMetersPerSecond());
         double rightOutput = rightForwardPID.execute(rightSpeed, getRightEncoderVelocityMetersPerSecond());
-
+        
         double LVoltagePercentCommand = ((leftOutput + leftFeedforward) / batteryVoltage);
         double RVoltagePercentCommand = ((rightOutput + rightFeedforward) / batteryVoltage);
 
@@ -171,10 +177,10 @@ public class DriveSubsystem extends SubsystemBase {
         leftMotor.set(LVoltagePercentCommand);
         rightMotor.set(RVoltagePercentCommand);
 
-        /*
+
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
         SmartDashboard.putNumber("rightSpeed", rightSpeed);
-        */
+        /*
         SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
         SmartDashboard.putNumber("Right Encoder V", getRightEncoderVelocityMetersPerSecond());
         /*
@@ -205,7 +211,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        SmartDashboard.putNumber("Left Speed Command", left_speed_cmd);
+        SmartDashboard.putNumber("Right Speed Command", right_speed_cmd);
     }
 
     public void setModePercentVoltage() {
@@ -332,10 +339,10 @@ public class DriveSubsystem extends SubsystemBase {
             positionMotionProfile.init(
                         start_dist, //start position
                         distance, // target position
-                        1, // max vel //1.5
-                        0.5, // max accel //1
+                        1, // max vel //1.5 // 1
+                        1, // max accel //1 // 0.5
                         0.02, // execution period 
-                        0.5 // deceleration //2
+                        1 // deceleration //2 // 0.5
             );
             state_flag_motion_profile = false;
         }
@@ -369,7 +376,7 @@ public class DriveSubsystem extends SubsystemBase {
         // Refer to the rate drive control diagram
         // We modulate our speed of the bot to close out
         // the position error, making it eventually zero
-        driveWithRotation(positionError, headingErrorMeters);
+        driveWithRotation(positionCmdOut, headingErrorMeters);
         //driveWithRotation(0.0, headingErrorMeters);
         //driveWithRotation(positionError, 0);
         // riveWithRotation(0.5, 0.0);

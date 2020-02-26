@@ -29,13 +29,21 @@ public class AutoPath2 extends SequentialCommandGroup {
    */
   public AutoPath2(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
-    super(new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.5), 
+    super(new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.3), 
         //turn
-        new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.3),
+        new AutoMove(driveSubsystem, 2.58), new StopNWait(driveSubsystem, 0.3),
         //move straight and then move arm
-        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5),
+        new AutoTurn(driveSubsystem, -60), new StopNWait(driveSubsystem, 0.3),
+        new AutoMove(driveSubsystem, 1.21), new StopNWait(driveSubsystem, 0.3),
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
         //dump powercells
-        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.3),
+        new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.1),
+        new AutoTurn(driveSubsystem, -140, 0.6), new StopNWait(driveSubsystem, 0.1),
+        //dump and then turn around
+        new AutoMove(driveSubsystem, 5), new StopNWait(driveSubsystem, 0.1));
+        //go straight
+        //go straight
+        /*new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.3),
         // make a u turn
          new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.3),
         //return to autoline
@@ -45,7 +53,7 @@ public class AutoPath2 extends SequentialCommandGroup {
         //head towards randevous point
         new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.3),
         //move arm
-        new Intake(intakeSubsystem).withTimeout(1));
+        new Intake(intakeSubsystem).withTimeout(1));*/
         //suck up POWERCELLS
     }
 }

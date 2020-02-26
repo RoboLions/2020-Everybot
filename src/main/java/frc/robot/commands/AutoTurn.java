@@ -18,6 +18,7 @@ public class AutoTurn extends CommandBase {
 	public AutoTurn(final DriveSubsystem subsystem, double heading, double speed) {
 		drivesubsystem = subsystem;
     addRequirements(subsystem);
+    drivesubsystem.ZeroYaw();
     initial_heading = drivesubsystem.getYaw();
     target_heading = heading;
   }
@@ -25,6 +26,7 @@ public class AutoTurn extends CommandBase {
   public AutoTurn(final DriveSubsystem subsystem, double heading) {
 		drivesubsystem = subsystem;
     addRequirements(subsystem);
+    drivesubsystem.ZeroYaw();
     initial_heading = drivesubsystem.getYaw();
     target_heading = heading;
   }
@@ -32,6 +34,7 @@ public class AutoTurn extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    drivesubsystem.ZeroYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -51,7 +54,7 @@ public class AutoTurn extends CommandBase {
     // boolean tempReturn = false;
     double current_heading = drivesubsystem.getYaw() - initial_heading;
     double headingError = Math.abs(target_heading - current_heading);
-    return(headingError < 0.5); // stop whenever we go to the commanded heading within 1 degree
+    return(headingError < 0.2); // stop whenever we go to the commanded heading within 1 degree
     // return(tempReturn);
   }
 }
