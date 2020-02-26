@@ -116,7 +116,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Heading Command PID for Autonomous and 
         headingPID.initialize2(
-            7.5, // Proportional Gain //15 // 7.5
+            9, // Proportional Gain //15 // 7.5
             10.0, // Integral Gain // 10
             0.0, // Derivative Gain 
             0.0, // Cage Limit //0.3

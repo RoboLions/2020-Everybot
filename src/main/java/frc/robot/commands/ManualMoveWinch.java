@@ -40,11 +40,9 @@ public class ManualMoveWinch extends CommandBase {
   @Override
   public void execute() {
     double winchPower;
-
     // left is the correct direction for winching up
     boolean leftTrigger = (driverController.getTriggerAxis(Hand.kLeft) > 0.25); 
     // boolean rightTrigger = (driverController.getTriggerAxis(Hand.kRight) > 0.25);
-
     if(leftTrigger) {
       winchPower = POWER;
     } 
@@ -54,7 +52,6 @@ public class ManualMoveWinch extends CommandBase {
     else {
       winchPower = 0;
     }
-
     winchSubsystem.setWinchPower(winchPower);
   }
 

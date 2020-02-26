@@ -24,12 +24,12 @@ public class ManualRollIntake extends CommandBase {
 
     @Override
     public void execute() {
-        boolean start = manipulatorController.getStartButton(); // intaje
-        boolean back = manipulatorController.getBackButton(); // outtake
+        boolean start = manipulatorController.getStartButton(); // outtake
+        boolean back = manipulatorController.getBackButton(); // intake
 
-        if(start) {
+        if(back) {
             intakeSubsystem.intakeBalls();
-        } else if(back) {
+        } else if(start) {
             intakeSubsystem.outtakeBalls();
         } else {
             intakeSubsystem.stop();
