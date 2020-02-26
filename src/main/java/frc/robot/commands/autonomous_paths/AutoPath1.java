@@ -31,8 +31,26 @@ public class AutoPath1 extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.5),
-          new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5),
-          new AutoMove(driveSubsystem, -0.5), new AutoTurn(driveSubsystem, 180)
-        ); 
+        //move straight 
+        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
+        //move to target zone and lower arm 
+        new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.3),
+        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //dump and then turn around
+        new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.5),
+        //go straight
+        new AutoTurn(driveSubsystem, -45, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //turn left 
+        new AutoMove(driveSubsystem, 2.2), new StopNWait(driveSubsystem, 0.5),
+        //move straight
+        new AutoTurn(driveSubsystem, 45, 0.6), new StopNWait(driveSubsystem, 0.5),
+        //enter the trench
+       new AutoMove(driveSubsystem, 2), new StopNWait(driveSubsystem, 0.5),
+        //continue drivng through the trench
+        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.3),  
+        //move arm down
+        new Intake(intakeSubsystem).withTimeout(1)); 
+        //suck powercells
+
   }
 }
