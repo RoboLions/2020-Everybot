@@ -94,14 +94,16 @@ public class JoystickDrive extends CommandBase {
 
         if((throttle > 0 && throttle < 0.25) || (throttle < 0 && throttle > -0.25)) {
             throttle = 0;
-
+        } else {
+            throttle = (Math.tan(.465 * (throttle * Math.PI))) / 3;
         }
 
         if((rotate > 0 && rotate < 0.25) || (rotate < 0 && rotate > -0.25)) {
             rotate = 0;
         }
 
-        throttle = (Math.tan(.465 * (throttle * Math.PI))) / 3;
+        // rotation speed scaler
+        rotate = 2*rotate;
 
         // double new_throttle = t_limiter.calculate(throttle);
         // double new_rotate = r_lLimiter.calculate(rotate);
@@ -111,7 +113,7 @@ public class JoystickDrive extends CommandBase {
 
         // Slow Mo Button
         if (driverController.getAButton()) {
-            throttle = 0.1;
+            throttle = Math.signum(throttle) * 0.1;
         }
 
         driveSubsystem.driveRoboLionsPID(-throttle, rotate);

@@ -97,6 +97,6 @@ public class RobotContainer {
     }
     
     public Command getAutonomousCommand() {
-        return nearTrenchPath;
+        return autoPath1;
     }
 }
