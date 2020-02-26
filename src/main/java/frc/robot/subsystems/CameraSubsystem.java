@@ -15,11 +15,9 @@ public class CameraSubsystem extends SubsystemBase {
 
   // Creates and defines the usb driver camera
   public CameraSubsystem() {
-    /*
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("driverCam", "/dev/video0");
-      camera.setResolution(640, 480); // TODO tune value to proper // (640, 480) is max for microsoft lifecam
-      camera.setFPS(8); // TODO tune value to proper
-      */
+      camera.setResolution(640, 480);   // TODO tune value to proper // (640, 480) is max for microsoft lifecam
+      camera.setFPS(8);   // TODO tune value to proper
   }
 
   @Override

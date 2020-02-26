@@ -39,7 +39,8 @@ public class AutoTurn extends CommandBase {
   public void execute() {
         // This function is constantly being called in the class at 50 Hz
         // This implements a heading move without any forward movement 
-        drivesubsystem.autoDrive(0.0, target_heading); //TODO pls check parameter
+        drivesubsystem.autoDrive(0.0, target_heading); 
+        
         System.out.println("AUTO WORKS");
   }
   // Returns true when the command should end.

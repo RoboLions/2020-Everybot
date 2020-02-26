@@ -357,7 +357,7 @@ public class DriveSubsystem extends SubsystemBase {
         double positionError = positionPID.execute(position_profile_command, position_feedback);
         double positionCmdOut = (positionError+feed_forward_rate);
 
-        System.out.println("Cmd: " + position_profile_command + "Fb: " + position_feedback + "Vel: " + getAverageEncoderVelocityMetersPerSecond());
+        // System.out.println("Cmd: " + position_profile_command + " Fb: " + position_feedback + " Vel: " + getAverageEncoderVelocityMetersPerSecond());
         // System.out.println("Feedback: " + position_feedback);
         // System.out.println("PID Error: " + positionError);
         //System.out.println("\n");
