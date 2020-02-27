@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CameraSubsystem extends SubsystemBase {
 
-  // Creates and defines the usb driver camera
+  // Creates and defines the usb driver logitech camera
   public CameraSubsystem() {
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("driverCam", "/dev/video0");
-      camera.setResolution(640, 480);   // TODO tune value to proper // (640, 480) is max for microsoft lifecam
+      camera.setResolution(480, 360);   // TODO tune value to proper // (640, 480) is max for microsoft lifecam
       camera.setFPS(8);   // TODO tune value to proper
   }
 
