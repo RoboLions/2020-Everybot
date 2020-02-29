@@ -22,8 +22,8 @@ public class ManualMoveWinch extends CommandBase {
 
   private final static XboxController driverController = RobotContainer.driverController;
   
-  public static final double REEL_IN_POWER = 0.8; // TODO tune value to proper
-  public static final double UNREEL_POWER = -0.2; // TODO tune value to proper
+  public static final double REEL_IN_POWER = 1; // TODO tune value to proper
+  public static final double UNREEL_POWER = -0.3; // TODO tune value to proper
   public static final double STOP_POWER = 0.0;
 
   public ManualMoveWinch(WinchSubsystem winch) {
@@ -43,7 +43,7 @@ public class ManualMoveWinch extends CommandBase {
     double winchPower;
     // left is the correct direction for winching up
     boolean leftTrigger = (driverController.getTriggerAxis(Hand.kLeft) > 0.25); 
-    // boolean rightTrigger = (driverController.getTriggerAxis(Hand.kRight) > 0.25);
+    //boolean rightTrigger = (driverController.getTriggerAxis(Hand.kRight) > 0.25);
     
     if(leftTrigger) {
       winchPower = REEL_IN_POWER;

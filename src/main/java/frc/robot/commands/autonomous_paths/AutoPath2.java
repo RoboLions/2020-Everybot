@@ -40,9 +40,12 @@ public class AutoPath2 extends SequentialCommandGroup {
         new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
         //dump powercells
         new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.1),
+        new AutoTurn(driveSubsystem, 180));
+        /*
         new AutoTurn(driveSubsystem, -140, 0.6), new StopNWait(driveSubsystem, 0.1),
         //dump and then turn around
         new AutoMove(driveSubsystem, 5), new StopNWait(driveSubsystem, 0.1));
+        */
         //go straight
         //go straight
         /*new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.3),
