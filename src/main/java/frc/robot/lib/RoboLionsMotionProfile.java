@@ -58,13 +58,13 @@ public class RoboLionsMotionProfile {
 
     public void finalize() {
         System.out.println();
-        System.out.println("Motion Profile object deleted...");
+        // System.out.println("Motion Profile object deleted...");
         System.out.println();
     }
 
     public void name_it(String file_name) {
         obj_name = file_name;
-        System.out.println("Motion profile object named..." + obj_name);
+        // System.out.println("Motion profile object named..." + obj_name);
     }
 
     public void command_new_target_pos(double start_pos, double target_pos) {
@@ -93,11 +93,7 @@ public class RoboLionsMotionProfile {
         time_period = execution_period;
         max_de_celeration = deceleration;
         enable_output = true; //important, only an initalize will enable the output
-        System.out.println("INIT HAS RUN");
-        System.out.println("INIT HAS RUN");
-        System.out.println("INIT HAS RUN");
-        System.out.println("INIT HAS RUN");
-        System.out.println("INIT HAS RUN");
+        //System.out.println("INIT HAS RUN");
     }
 
     public void reset() {
@@ -127,7 +123,7 @@ public class RoboLionsMotionProfile {
             velocity_feed_forward = 0.0;
             acceleration_feed_forward = 0.0;
 
-            System.out.println("BEFORE RETURN OUTPUT == FALSE");
+            // System.out.println("BEFORE RETURN OUTPUT == FALSE");
             return(position_command);
         }
         

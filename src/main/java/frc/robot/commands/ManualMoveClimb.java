@@ -7,13 +7,18 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ManualMoveClimb extends CommandBase {
-    public static final double TOWARDS_FRONT_POWER = 0.5; // TODO tune value to proper
-    public static final double TOWARDS_BACK_POWER = -0.7; // TODO tune value to proper
+    public static final double TOWARDS_FRONT_POWER = 0.5; 
+    public static final double TOWARDS_BACK_POWER = -1; 
+
+    public static final double ACTUAL_MAX_ENCODER_COUNTS = 22550; 
+    public static final double MIN_ENCODER_COUNTS = 0;
 
     private final ClimberSubsystem climberSubsystem;
     private final XboxController driverController = RobotContainer.driverController;
 
     public static int climb_motion_state = 0;
+
+    public static double climberEncoderCounts;
 
     public ManualMoveClimb(ClimberSubsystem climb) {
         climberSubsystem = climb;
@@ -25,12 +30,14 @@ public class ManualMoveClimb extends CommandBase {
     }
 
     @Override
-    public void execute() {  
+    public void execute() {
+        climberEncoderCounts = climberSubsystem.getEncoderPosition();
         double climbPower;
         
         boolean left_bumper = driverController.getBumper(Hand.kLeft);
         boolean right_bumper = driverController.getBumper(Hand.kRight);
 
+        /*
         if(left_bumper) {
             climbPower = TOWARDS_FRONT_POWER; // moving inwards
         } else if(right_bumper) {
@@ -38,6 +45,27 @@ public class ManualMoveClimb extends CommandBase {
         } else {
             climbPower = 0; // not moving based on bumpers
         }
+        */
+        
+        if(driverController.getBackButtonPressed()) {
+            climberSubsystem.resetEncoder();
+        }
+
+        // Let down climber
+        if(left_bumper && (climberEncoderCounts > MIN_ENCODER_COUNTS)) {
+            climbPower = TOWARDS_FRONT_POWER; // moving inwards
+        } 
+        // Pull up climber
+        else if(right_bumper && (climberEncoderCounts < ACTUAL_MAX_ENCODER_COUNTS)) {
+            climbPower = TOWARDS_BACK_POWER; // moving outwards
+        } 
+        else {
+            climbPower = 0; // not moving based on bumpers
+        }
+
+        climberSubsystem.setClimbPower(climbPower);
+
+        /*
 
         boolean x = driverController.getXButton();
         // x = Color Wheel
@@ -103,6 +131,7 @@ public class ManualMoveClimb extends CommandBase {
         if(left_bumper || right_bumper) {
             climb_motion_state = 0;
         }
+        */
     }
 
     @Override

@@ -25,7 +25,9 @@ import frc.robot.subsystems.IntakeSubsystem;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoPath2 extends SequentialCommandGroup {
   /**
-   * Creates a new middle baseline
+   * This path starts at the middle of the initiation line,
+   * empties balls into the inner port and
+   * goes to the trench run
    */
   public AutoPath2(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.

@@ -44,7 +44,7 @@ public class AutoTurn extends CommandBase {
         // This implements a heading move without any forward movement 
         drivesubsystem.autoDrive(0.0, target_heading); 
         
-        System.out.println("AUTO WORKS");
+        //System.out.println("AUTO WORKS");
   }
   // Returns true when the command should end.
   @Override

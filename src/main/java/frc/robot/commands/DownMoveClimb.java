@@ -20,7 +20,7 @@ public class DownMoveClimb extends CommandBase {
    * Creates a new SimpleMoveClimb.
    */
   public static final double TOWARDS_FRONT_POWER = 0.5; // TODO tune value to proper
-  public static final double TOWARDS_BACK_POWER = -0.7; // TODO tune value to proper
+  public static final double TOWARDS_BACK_POWER = -1; // TODO tune value to proper
 
   public static final int UPPER_MIN_ENCODER_COUNTS = 0; //TODO placeholder
   public static final int ACTUAL_MIN_ENCODER_COUNTS = 0; //TODO placeholder

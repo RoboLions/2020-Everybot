@@ -27,5 +27,5 @@ public class RobotMap {
     public static WPI_TalonSRX armMotor = new WPI_TalonSRX(ARM_PORT);
 
     public static PigeonIMU arm_imu = new PigeonIMU(ARM_IMU_PORT);
-    public static PigeonIMU drive_imu = new PigeonIMU(climberMotor);
+    public static PigeonIMU drive_imu = new PigeonIMU(winchMotor);
 }

@@ -11,8 +11,17 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.autonomous_paths.AutoMoveForward;
+import frc.robot.commands.autonomous_paths.AutoPath0;
+import frc.robot.commands.autonomous_paths.AutoPath1;
+import frc.robot.commands.autonomous_paths.AutoPath2;
 import frc.robot.lib.RoboLionsPID;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -28,25 +37,38 @@ public class Robot extends TimedRobot {
 
   private RoboLionsPID leftDrivetrainPID = m_robotContainer.driveSubsystem.leftForwardPID;
   private RoboLionsPID rightDrivetrainPID = m_robotContainer.driveSubsystem.rightForwardPID;
+
+  private DriveSubsystem driveSubsystem = m_robotContainer.driveSubsystem;
+  private IntakeSubsystem intakeSubsystem = m_robotContainer.intakeSubsystem;
+  private ArmSubsystem armSubsystem = m_robotContainer.armSubsystem;
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     m_robotContainer.driveSubsystem.setModePercentVoltage();
     m_robotContainer.driveSubsystem.resetEncoders();
     m_robotContainer.driveSubsystem.ZeroYaw();
+    m_chooser.setDefaultOption("Default Move Forward/Cross Line", new AutoMoveForward(driveSubsystem));
+    m_chooser.addOption("Near: Empty into Lower", new AutoPath0(driveSubsystem, intakeSubsystem));
+    m_chooser.addOption("Near: Empty into Lower, Go to Trench", new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem));
+    m_chooser.addOption("Middle: Empty into Lower, Go to Trench", new AutoPath2(driveSubsystem, intakeSubsystem, armSubsystem));
+    SmartDashboard.putData("Autonomous Chooser", m_chooser);
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
@@ -54,14 +76,20 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("ARM Pitch", -m_robotContainer.armSubsystem.getPitch());
     SmartDashboard.putNumber("Yaw", m_robotContainer.driveSubsystem.getYaw());
     // inverted pitch because of how everybot is built
-    /*SmartDashboard.putNumber("leftSpeed", m_robotContainer.driveSubsystem.leftSpeed);
-    SmartDashboard.putNumber("rightSpeed", rightSpeed);
-    SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
-    SmartDashboard.putNumber("Right Encoder V", getRightEncoderVelocityMetersPerSecond());
-    SmartDashboard.putNumber("Left Motor Voltage", leftMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Right Motor Voltage", rightMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
-    */
+    /*
+     * SmartDashboard.putNumber("leftSpeed",
+     * m_robotContainer.driveSubsystem.leftSpeed);
+     * SmartDashboard.putNumber("rightSpeed", rightSpeed);
+     * SmartDashboard.putNumber("Left Encoder V",
+     * getLeftEncoderVelocityMetersPerSecond());
+     * SmartDashboard.putNumber("Right Encoder V",
+     * getRightEncoderVelocityMetersPerSecond());
+     * SmartDashboard.putNumber("Left Motor Voltage",
+     * leftMotor.getMotorOutputVoltage());
+     * SmartDashboard.putNumber("Right Motor Voltage",
+     * rightMotor.getMotorOutputVoltage());
+     * SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
+     */
     SmartDashboard.putNumber("Left Encoder Counts", m_robotContainer.driveSubsystem.getLeftEncoderPosition());
     SmartDashboard.putNumber("Right Encoder Counts", m_robotContainer.driveSubsystem.getRightEncoderPosition());
     SmartDashboard.putNumber("Left Dist Meters", m_robotContainer.driveSubsystem.leftDistanceTravelledInMeters());
@@ -70,11 +98,18 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Temp Right F500", RobotMap.rightDriveMotor.getTemperature());
     SmartDashboard.putNumber("Left Motor Voltage", RobotMap.leftDriveMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Motor Voltage", RobotMap.rightDriveMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Climb Encoder Counts", m_robotContainer.climberSubsystem.getEncoderPosition());
   }
 
   @Override
+  public void disabledPeriodic() {
+
+  }
+  
+  @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_chooser.getSelected();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
