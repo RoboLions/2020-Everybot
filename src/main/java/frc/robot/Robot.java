@@ -65,9 +65,10 @@ public class Robot extends TimedRobot {
     m_robotContainer.driveSubsystem.ZeroYaw();
     m_chooser.setDefaultOption("Default Move Forward/Cross Line", new AutoMoveForward(driveSubsystem));
     m_chooser.addOption("Near: Empty into Lower", new AutoPath0(driveSubsystem, intakeSubsystem));
-    m_chooser.addOption("Near: Empty into Lower, Back, 130 Turn", new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem));
+    m_chooser.addOption("Near: Empty into Lower, Back, 160 Turn", new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem));
     // m_chooser.addOption("Middle: Empty into Lower, Back, 130 Turn", new AutoPath2(driveSubsystem, intakeSubsystem, armSubsystem));
     m_chooser.addOption("Middle: Empty into Lower - 90 Degree Path", new TestPath(driveSubsystem, intakeSubsystem, armSubsystem));
+
     SmartDashboard.putData("Autonomous Chooser", m_chooser);
   }
 
@@ -75,7 +76,7 @@ public class Robot extends TimedRobot {
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
    * teleoperated and test.
-   *
+   *\
    * <p>
    * This runs after the mode specific periodic functions, but before LiveWindow
    * and SmartDashboard integrated updating.

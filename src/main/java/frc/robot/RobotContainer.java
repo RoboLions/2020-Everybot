@@ -65,7 +65,7 @@ public class RobotContainer {
         armSubsystem.setDefaultCommand(
             new ManualMoveArm(armSubsystem)
         );
-
+        
         climberSubsystem.setDefaultCommand(
             new ManualMoveClimb(climberSubsystem)
         );
@@ -96,7 +96,7 @@ public class RobotContainer {
             new AutoTurn(driveSubsystem, 20)
         );
         */
-
+    
         /*** MANIPULATOR CONTROLLER***/
         new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
             new AutoPath2(driveSubsystem, intakeSubsystem, armSubsystem)

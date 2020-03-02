@@ -24,7 +24,9 @@ public class ManualMoveWinch extends CommandBase {
   private final static XboxController testerController = RobotContainer.testController;
   
   public static final double REEL_IN_POWER = 1; // TODO tune value to proper
+
   public static final double UNREEL_POWER = -0.5; // TODO tune value to proper
+
   public static final double STOP_POWER = 0.0;
 
   public ManualMoveWinch(WinchSubsystem winch) {
