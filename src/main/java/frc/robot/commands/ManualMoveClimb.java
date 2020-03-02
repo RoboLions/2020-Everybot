@@ -10,11 +10,12 @@ public class ManualMoveClimb extends CommandBase {
     public static final double TOWARDS_FRONT_POWER = 0.5; 
     public static final double TOWARDS_BACK_POWER = -1; 
 
-    public static final double ACTUAL_MAX_ENCODER_COUNTS = 22550; 
-    public static final double MIN_ENCODER_COUNTS = 0;
+    public static final double ACTUAL_MAX_ENCODER_COUNTS = 22700; //22550
+    public static final double MIN_ENCODER_COUNTS = -50;
 
     private final ClimberSubsystem climberSubsystem;
     private final XboxController driverController = RobotContainer.driverController;
+    private final static XboxController testerController = RobotContainer.testController;
 
     public static int climb_motion_state = 0;
 
@@ -32,22 +33,22 @@ public class ManualMoveClimb extends CommandBase {
     @Override
     public void execute() {
         climberEncoderCounts = climberSubsystem.getEncoderPosition();
-        double climbPower;
+        double climbPower = 0;
         
         boolean left_bumper = driverController.getBumper(Hand.kLeft);
         boolean right_bumper = driverController.getBumper(Hand.kRight);
 
-        /*
-        if(left_bumper) {
-            climbPower = TOWARDS_FRONT_POWER; // moving inwards
-        } else if(right_bumper) {
-            climbPower = TOWARDS_BACK_POWER; // moving outwards
-        } else {
-            climbPower = 0; // not moving based on bumpers
-        }
-        */
+        boolean test_left_bumper = testerController.getBumper(Hand.kLeft);
+        boolean test_right_bumper = testerController.getBumper(Hand.kRight);
+
         
-        if(driverController.getBackButtonPressed()) {
+        if(test_left_bumper) {
+            climbPower = TOWARDS_FRONT_POWER; // moving inwards
+        } else if(test_right_bumper) {
+            climbPower = TOWARDS_BACK_POWER; // moving outwards
+        }
+
+        if(testerController.getBackButtonPressed()) {
             climberSubsystem.resetEncoder();
         }
 
@@ -59,9 +60,12 @@ public class ManualMoveClimb extends CommandBase {
         else if(right_bumper && (climberEncoderCounts < ACTUAL_MAX_ENCODER_COUNTS)) {
             climbPower = TOWARDS_BACK_POWER; // moving outwards
         } 
-        else {
+        
+        else if(!left_bumper && !right_bumper && !test_left_bumper && !test_right_bumper) {
             climbPower = 0; // not moving based on bumpers
         }
+        
+        
 
         climberSubsystem.setClimbPower(climbPower);
 

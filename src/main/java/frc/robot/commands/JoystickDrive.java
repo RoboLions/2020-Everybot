@@ -109,12 +109,20 @@ public class JoystickDrive extends CommandBase {
         // double new_rotate = r_lLimiter.calculate(rotate);
 
         // The speed limit is a multiple of throttle
-        // Speed Limit = 2.5 meters per second
 
-        // Slow Mo Button
-        if (driverController.getAButton()) {
-            throttle = Math.signum(throttle) * 0.1;
+        // Slow Mode
+        if (driverController.getTriggerAxis(Hand.kRight) > 0.25) {
+            throttle = Math.signum(throttle) * 0.75;
         }
+        // Fast Mode
+        else if (driverController.getAButton()) {
+            throttle = (throttle*1.1);
+        }
+        // Normal Driving Speed
+        else {
+            throttle = (throttle*0.8);
+        }
+        
 
         driveSubsystem.driveRoboLionsPID(-throttle, rotate);
         //driveSubsystem.driveRoboLionsPID(-throttle*2.5, rotate);

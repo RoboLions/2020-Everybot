@@ -10,7 +10,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.lib.RoboLionsMotionProfile;
 import frc.robot.lib.RoboLionsPID;
@@ -44,6 +48,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     private static final WPI_TalonFX leftMotor = RobotMap.leftDriveMotor;
     private static final WPI_TalonFX rightMotor = RobotMap.rightDriveMotor;
+
+    private static XboxController driverController = Robot.m_robotContainer.driverController;
 
     private final PigeonIMU imu = RobotMap.drive_imu;
 
@@ -173,23 +179,26 @@ public class DriveSubsystem extends SubsystemBase {
 
         //SmartDashboard.putNumber("Right Motor Command", RVoltagePercentCommand);
         //SmartDashboard.putNumber("Left Motor Command", LVoltagePercentCommand);
+        
 
         leftMotor.set(LVoltagePercentCommand);
         rightMotor.set(RVoltagePercentCommand);
 
 
-        SmartDashboard.putNumber("leftSpeed", leftSpeed);
-        SmartDashboard.putNumber("rightSpeed", rightSpeed);
-        /*
+        // SmartDashboard.putNumber("leftSpeed", leftSpeed);
+        // SmartDashboard.putNumber("rightSpeed", rightSpeed);
+        
         SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
         SmartDashboard.putNumber("Right Encoder V", getRightEncoderVelocityMetersPerSecond());
-        /*
-        SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
-        SmartDashboard.putNumber("Left Encoder Counts", getLeftEncoderPosition());
-        SmartDashboard.putNumber("Right Encoder Counts", getRightEncoderPosition());
+        
+        //SmartDashboard.putNumber("Yaw Value", getYaw());
+        //SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
+        //SmartDashboard.putNumber("Left Encoder Counts", getLeftEncoderPosition());
+        //SmartDashboard.putNumber("Right Encoder Counts", getRightEncoderPosition());
+        
         SmartDashboard.putNumber("Left Dist Meters", leftDistanceTravelledInMeters());
         SmartDashboard.putNumber("Right Dist Meters", rightDistanceTravelledInMeters());
-        */
+        
         //System.out.println(getLeftEncoderVelocityMetersPerSecond() + "," + getRightEncoderVelocityMetersPerSecond());
         // System.out.println("Left Error: " + (leftSpeed-getLeftEncoderVelocityMetersPerSecond()) + "/ Right Error: " + (getRightEncoderVelocityMetersPerSecond()-rightSpeed));
         // System.out.println("Debug Out  " + rightOutput + " /// " + rightFeedforward + " /// " + JoystickDrive.throttle);

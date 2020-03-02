@@ -127,7 +127,7 @@ public class RoboLionsMotionProfile {
             return(position_command);
         }
         
-        if (velocity_to_decel < max_velocity) {
+        if (velocity_to_decel < max_velocity) { //absolute value of your current velovity state
             //our velocity to decel is less than our max, set our internal state to decel
             decel_switch = ROBO_LION_MOTION_PROFILE_STATE_DECEL;
             //once we set the decel, we continue to decel

@@ -45,6 +45,7 @@ public class RobotContainer {
     // The driver's controller
     public static XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
     public static XboxController manipulatorController = new XboxController(OIConstants.MANIPULATOR_CONTROLLER_PORT);
+    public static XboxController testController = new XboxController(OIConstants.TEST_CONTROLLER_PORT);
 
     // Auto Commands
     public static AutoPath1 autoPath1 = new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem);

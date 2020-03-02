@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
+import frc.robot.commands.Outtake;
 import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMoveArm.Position;
 
@@ -24,12 +25,33 @@ import frc.robot.commands.AutoMoveArm.Position;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class TestPath extends SequentialCommandGroup {
   /**
-   * Robot moves from the initiation line towards the goal and then emptys into the goal
+   * This auto path starts at the middle of the field and the goes straight forward,
+   * turns 90, goes straight until in front of the ports,
+   * turns -90 and then goes forward to empty balls into the lower port
+   * 
+   * MADE TO AVOID OTHER ROBOTS WHEN IN MIDDLE
+   * 
+   * FRONT ROBOT WHEEL ON THE INITIATION LINE
    */
 
   public TestPath(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());  
-    super(new AutoTurn(driveSubsystem, 180) );
+    // move straight
+    super (new AutoMove(driveSubsystem, 2.7) //2.3
+    , new StopNWait(driveSubsystem, 0.5),
+      //turn right
+      new AutoTurn(driveSubsystem, 90), new StopNWait(driveSubsystem, 0.5), //0.2
+      //move to in front of the target zone
+      new AutoMove(driveSubsystem, 1.621), new StopNWait(driveSubsystem, 0.5),
+      //turn left
+      new AutoTurn(driveSubsystem, -90), new StopNWait(driveSubsystem, 0.6),
+      //shoot out balls
+      new AutoMove(driveSubsystem, 0.3), new StopNWait(driveSubsystem, 0.3),
+      
+      new Outtake(intakeSubsystem).withTimeout(1.5));
+      //edge closer
+      /*new AutoMove(driveSubsystem, 0.5), new StopNWait(driveSubsystem, 0.5),
+      //dump
+      new Outtake(intakeSubsystem).withTimeout(1.5));
+      */
   }
 }
