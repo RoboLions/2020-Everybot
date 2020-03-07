@@ -7,13 +7,18 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.AutonomousPaths.TestPath;
 import frc.robot.commands.autonomous_paths.AutoMoveForward;
 import frc.robot.commands.autonomous_paths.AutoPath0;
 import frc.robot.commands.autonomous_paths.AutoPath1;
@@ -33,7 +38,7 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private RobotContainer m_robotContainer;
+  public static RobotContainer m_robotContainer;
 
   private RoboLionsPID leftDrivetrainPID = m_robotContainer.driveSubsystem.leftForwardPID;
   private RoboLionsPID rightDrivetrainPID = m_robotContainer.driveSubsystem.rightForwardPID;
@@ -41,6 +46,10 @@ public class Robot extends TimedRobot {
   private DriveSubsystem driveSubsystem = m_robotContainer.driveSubsystem;
   private IntakeSubsystem intakeSubsystem = m_robotContainer.intakeSubsystem;
   private ArmSubsystem armSubsystem = m_robotContainer.armSubsystem;
+
+  private XboxController driverController = m_robotContainer.driverController;
+  private WPI_TalonFX leftMotor = RobotMap.leftDriveMotor;
+  private WPI_TalonFX rightMotor = RobotMap.rightDriveMotor;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -56,8 +65,10 @@ public class Robot extends TimedRobot {
     m_robotContainer.driveSubsystem.ZeroYaw();
     m_chooser.setDefaultOption("Default Move Forward/Cross Line", new AutoMoveForward(driveSubsystem));
     m_chooser.addOption("Near: Empty into Lower", new AutoPath0(driveSubsystem, intakeSubsystem));
-    m_chooser.addOption("Near: Empty into Lower, Go to Trench", new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem));
-    m_chooser.addOption("Middle: Empty into Lower, Go to Trench", new AutoPath2(driveSubsystem, intakeSubsystem, armSubsystem));
+    m_chooser.addOption("Near: Empty into Lower, Back, 160 Turn", new AutoPath1(driveSubsystem, intakeSubsystem, armSubsystem));
+    // m_chooser.addOption("Middle: Empty into Lower, Back, 130 Turn", new AutoPath2(driveSubsystem, intakeSubsystem, armSubsystem));
+    m_chooser.addOption("Middle: Empty into Lower - 90 Degree Path", new TestPath(driveSubsystem, intakeSubsystem, armSubsystem));
+
     SmartDashboard.putData("Autonomous Chooser", m_chooser);
   }
 
@@ -65,7 +76,7 @@ public class Robot extends TimedRobot {
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
    * teleoperated and test.
-   *
+   *\
    * <p>
    * This runs after the mode specific periodic functions, but before LiveWindow
    * and SmartDashboard integrated updating.
@@ -187,6 +198,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // System.out.println(RobotContainer.driverController.getY(Hand.kLeft));
+
   }
 
   /**

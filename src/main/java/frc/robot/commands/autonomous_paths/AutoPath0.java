@@ -30,8 +30,8 @@ public class AutoPath0 extends SequentialCommandGroup {
   public AutoPath0(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.2),
+    super(new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.2), //2.8
         //move straight 
-        new Outtake(intakeSubsystem).withTimeout(0.5));
+        new Outtake(intakeSubsystem).withTimeout(1.5));
   }
 }

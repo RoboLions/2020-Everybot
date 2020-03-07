@@ -33,16 +33,22 @@ public class AutoPath2 extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     super(new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.3), 
         //turn
-        new AutoMove(driveSubsystem, 2.58), new StopNWait(driveSubsystem, 0.3),
+        new AutoMove(driveSubsystem, 2.585), new StopNWait(driveSubsystem, 0.3),
         //move straight and then move arm
         new AutoTurn(driveSubsystem, -60), new StopNWait(driveSubsystem, 0.3),
         new AutoMove(driveSubsystem, 1.21), new StopNWait(driveSubsystem, 0.3),
-        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
-        //dump powercells
+        new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.3),
         new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.1),
+        new AutoTurn(driveSubsystem, 160));
+        //dump powercells
+        /*
+        new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.1),
+        new AutoTurn(driveSubsystem, 180));
+        /*
         new AutoTurn(driveSubsystem, -140, 0.6), new StopNWait(driveSubsystem, 0.1),
         //dump and then turn around
         new AutoMove(driveSubsystem, 5), new StopNWait(driveSubsystem, 0.1));
+        */
         //go straight
         //go straight
         /*new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.3),

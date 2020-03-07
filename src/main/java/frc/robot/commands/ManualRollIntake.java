@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 /**
  *
@@ -24,12 +25,15 @@ public class ManualRollIntake extends CommandBase {
 
     @Override
     public void execute() {
-        boolean start = manipulatorController.getStartButton(); // outtake
-        boolean back = manipulatorController.getBackButton(); // intake
+        // boolean start = manipulatorController.getStartButton(); // outtake
+        // boolean back = manipulatorController.getBackButton(); // intake
 
-        if(back) {
+        boolean mLeftTrigger = manipulatorController.getTriggerAxis(Hand.kLeft) > 0.25;
+        boolean mRightTrigger = manipulatorController.getTriggerAxis(Hand.kRight) > 0.25;
+
+        if(mRightTrigger) {
             intakeSubsystem.intakeBalls();
-        } else if(start) {
+        } else if(mLeftTrigger) {
             intakeSubsystem.outtakeBalls();
         } else {
             intakeSubsystem.stop();
