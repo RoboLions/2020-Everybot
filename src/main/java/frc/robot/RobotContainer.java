@@ -13,6 +13,7 @@ import frc.robot.commands.ManualMoveWinch;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ColorWheelSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
@@ -41,6 +42,7 @@ public class RobotContainer {
     public static ArmSubsystem armSubsystem = new ArmSubsystem();
     public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
     public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
+    public static ColorWheelSubsystem colorWheelSubsystem = new ColorWheelSubsystem();
 
     // The driver's controller
     public static XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);

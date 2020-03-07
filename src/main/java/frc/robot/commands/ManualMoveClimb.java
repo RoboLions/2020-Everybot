@@ -11,7 +11,7 @@ public class ManualMoveClimb extends CommandBase {
     public static final double TOWARDS_BACK_POWER = -1; 
 
     public static final double ACTUAL_MAX_ENCODER_COUNTS = 22550; 
-    public static final double MIN_ENCODER_COUNTS = 0;
+    public static final double MIN_ENCODER_COUNTS = 0; 
 
     private final ClimberSubsystem climberSubsystem;
     private final XboxController driverController = RobotContainer.driverController;

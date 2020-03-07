@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.revrobotics.ColorMatch;
+
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
@@ -44,7 +46,7 @@ public final class Constants {
   }
 
   public static final class ColorWheelConstants {
-    public static final double WHEEL_POWER = 0.5;
+    public static final double WHEEL_POWER = 0.3;
 
     public static final Color RED = new Color(0.465, 0.3803, 0.1563);
     public static final Color YELLOW = new Color(0.32, 0.5463, 0.132);
