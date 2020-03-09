@@ -120,14 +120,14 @@ public class RoboLionsMotionProfile {
         if (enable_output == false) {
             //position_command = 
             //current_position_state = target_position;
-            velocity_feed_forward = 0.0;
-            acceleration_feed_forward = 0.0;
+            velocity_feed_forward = acceleration_feed_forward = 0.0;
 
             // System.out.println("BEFORE RETURN OUTPUT == FALSE");
             return(position_command);
         }
         
-        if (velocity_to_decel < max_velocity) { //absolute value of your current velovity state
+        // FIXED
+        if (velocity_to_decel < Math.abs(current_velocity_state)) { //absolute value of your current velovity state
             //our velocity to decel is less than our max, set our internal state to decel
             decel_switch = ROBO_LION_MOTION_PROFILE_STATE_DECEL;
             //once we set the decel, we continue to decel
@@ -179,16 +179,25 @@ public class RoboLionsMotionProfile {
         } 
         
     }else {
+        /*
         //update our velocity based on max decleration, period an integration
         //of our acceleration into the command
         current_velocity_state = current_velocity_state -
-            velocity_sign * max_de_celeration * time_period;
+            (velocity_sign * max_de_celeration * time_period);
 
         //update our state of our acceleration
-        current_acceleration_state = velocity_sign * max_de_celeration;
+        current_acceleration_state = (velocity_sign * max_de_celeration);
+        */
+
+        // keep computing the new velocity based on the decel that we 
+        // already computed and the direction
+        current_velocity_state = (velocity_sign * velocity_to_decel);
+
+        //update the state of our acceleration
+        current_acceleration_state = (-velocity_sign * max_de_celeration);
     }
     
-    current_position_state = current_position_state + current_velocity_state * time_period;
+    current_position_state = current_position_state + (current_velocity_state * time_period);
     /*
     System.out.println("Current Position: " + current_position_state);
     System.out.println("Current Velocity: " + current_velocity_state);
