@@ -13,6 +13,7 @@ import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
+import frc.robot.commands.StopNWait;
 import frc.robot.commands.AutoMove.Mode;
 import frc.robot.commands.AutoMoveArm.Position;
 import frc.robot.subsystems.ArmSubsystem;
@@ -29,24 +30,29 @@ public class AutoPath10Mirror extends SequentialCommandGroup {
   public AutoPath10Mirror(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoTurn(driveSubsystem, 12, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-    //position towards the target zone
-        new AutoMoveArm(armSubsystem, Position.SCORE), new Outtake(intakeSubsystem, Mode.TIME,1), 
-        //raise arm and then dump
-        new AutoTurn(driveSubsystem, 180, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 25, 0.6),
-        //turn around and then move
-        new AutoTurn(driveSubsystem, -27, 0.6), new AutoMoveArm(armSubsystem, Position.GROUND),  
-        //go to the trench run
-        new Intake(intakeSubsystem, Mode.TIME,1), new AutoMove(driveSubsystem, Mode.DISTANCE, 10, 0.6),
-        //pick up powercells
-        new AutoTurn(driveSubsystem, -90, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 5, 0.6),
-        //began to make a u turn
-        new AutoTurn(driveSubsystem, -90, 0.6), new AutoMove(driveSubsystem, Mode.DISTANCE, 12.5, 0.6),
-        //heading towards autoline
-        new AutoTurn(driveSubsystem, 13, 0.6), new AutoMoveArm(armSubsystem, Position.GROUND),
-        //turn and then lower arm
-        new Intake(intakeSubsystem, Mode.TIME,1));
-        //suck balls
+    super(
+        //move straight 
+        new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.1),
+        //dump
+        new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.1),
+        //move back
+        new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.1),
+        //turn right
+        new AutoTurn(driveSubsystem, 160), new StopNWait(driveSubsystem, 0.1),
+        //move straight
+        new AutoMove(driveSubsystem, 2), new StopNWait(driveSubsystem, 0.3),
+        //turn right
+        new AutoTurn(driveSubsystem, 25), new StopNWait(driveSubsystem, 0.1),
+        //move straight
+        new AutoMove(driveSubsystem, 2), new StopNWait(driveSubsystem, 0.3),
+        //turn right
+        new AutoTurn(driveSubsystem, 90), new StopNWait(driveSubsystem, 0.1),
+        //move straight
+        new AutoMove(driveSubsystem, 0.4), new StopNWait(driveSubsystem, 0.3),
+        //turn right
+        new AutoTurn(driveSubsystem, 90), new StopNWait(driveSubsystem, 0.1),
+        //move straight
+        new AutoMove(driveSubsystem, 2), new StopNWait(driveSubsystem, 0.3));
   }
 }
 
