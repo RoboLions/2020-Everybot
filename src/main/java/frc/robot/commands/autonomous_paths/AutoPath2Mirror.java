@@ -29,23 +29,21 @@ public class AutoPath2Mirror extends SequentialCommandGroup {
    */
   public AutoPath2Mirror(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
-    super(new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.5), 
-        //turn
-        new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.3),
-        //move straight and then move arm
-        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5),
+    //move straight
+    super(new AutoMove(driveSubsystem, 2.3), new StopNWait(driveSubsystem, 0.3),
+      //turn right
+      new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.3), 
+        //move straight
+        new AutoMove(driveSubsystem, 2.585), new StopNWait(driveSubsystem, 0.3),
+        //move left
+        new AutoTurn(driveSubsystem, -90), new StopNWait(driveSubsystem, 0.3),
+        //move straight
+        new AutoMove(driveSubsystem, 0.55), new StopNWait(driveSubsystem, 0.3),
         //dump powercells
-        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.3),
-        // make a u turn
-         new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.3),
-        //return to autoline
-        new AutoTurn(driveSubsystem, -60, 0.6), new StopNWait(driveSubsystem, 0.3), 
-        //make a left turm
-        new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.3),
-        //head towards randevous point
-        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.3),
-        //move arm
-        new Intake(intakeSubsystem).withTimeout(1));
-        //suck up POWERCELLS
-    }
+        new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.3),
+        //turn left
+        new AutoTurn(driveSubsystem, -160), new StopNWait(driveSubsystem, 0.3),
+        //move straight
+        new AutoMove(driveSubsystem, 3.52));
+  }
 }

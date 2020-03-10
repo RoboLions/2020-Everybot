@@ -28,34 +28,22 @@ public class AutoPath5 extends SequentialCommandGroup {
    * Creates a middle 2 cycles.
    */
   public AutoPath5(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    super(new AutoTurn(driveSubsystem, 45, 0.6), new StopNWait(driveSubsystem, 0.5), 
+ //move straight
+ super(new AutoMove(driveSubsystem, 2.3), new StopNWait(driveSubsystem, 0.3),
     //turn right
-        new AutoMove(driveSubsystem,2.85),new StopNWait(driveSubsystem, 0.3),
-        //head to target zone
-        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.5), 
-        //dump powercells
-        new AutoTurn(driveSubsystem, 180, 0.6),new StopNWait(driveSubsystem, 0.5), 
-        //make u turn
-        new AutoMove(driveSubsystem,2.85),new StopNWait(driveSubsystem, 0.5),
-        //head back  
-        new AutoTurn(driveSubsystem, -45, 0.6),new StopNWait(driveSubsystem, 0.5), 
-        //turn left
-        new AutoMove(driveSubsystem, 1.38),new StopNWait(driveSubsystem, 0.5),
-        //land on autoline and then head to randevous
-        new AutoMoveArm(armSubsystem, Position.GROUND),new StopNWait(driveSubsystem, 0.5),
-        //lower arm
-        new Intake(intakeSubsystem).withTimeout(1),new StopNWait(driveSubsystem, 0.5),
-        //suck powercells from the randevous
-        new AutoTurn(driveSubsystem, -165, 0.6),new StopNWait(driveSubsystem, 0.5),
-        //turn left
-        new AutoMove(driveSubsystem, 6.9),new StopNWait(driveSubsystem, 0.5),
-        //go to the target zone
-        new AutoMoveArm(armSubsystem, Position.SCORE),new StopNWait(driveSubsystem, 0.5),
-        //raise arm
-        new Outtake(intakeSubsystem, Mode.TIME,1));
-        //dump
-  }
+    new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.3), 
+    //move straight
+    new AutoMove(driveSubsystem, 2.585), new StopNWait(driveSubsystem, 0.3),
+    //move left
+    new AutoTurn(driveSubsystem, -90), new StopNWait(driveSubsystem, 0.3),
+    //move straight
+    new AutoMove(driveSubsystem, 0.55), new StopNWait(driveSubsystem, 0.3),
+    //dump powercells
+    new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.3),
+    //turn left
+    new AutoTurn(driveSubsystem, -170), new StopNWait(driveSubsystem, 0.3),
+    //move straight pass the autoline
+    new AutoMove(driveSubsystem, 5));
+}
 }
 

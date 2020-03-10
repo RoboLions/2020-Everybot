@@ -28,18 +28,17 @@ public class AutoPath3 extends SequentialCommandGroup {
    */
   public AutoPath3(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem, 2.7), new StopNWait(driveSubsystem, 0.5),
+    //move straight
+    super(new AutoMove(driveSubsystem, 2.3), new StopNWait(driveSubsystem, 0.3),
+      //turn right
+      new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.3), 
         //move straight
-        new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //turn right
-        new AutoMove(driveSubsystem, 3.75), new StopNWait(driveSubsystem, 0.5),
+        new AutoMove(driveSubsystem, 3.14), new StopNWait(driveSubsystem, 0.3),
+        //move left
+        new AutoTurn(driveSubsystem, -90), new StopNWait(driveSubsystem, 0.3),
         //move straight
-        new AutoTurn(driveSubsystem, -90, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //position to dump
-        new AutoMove(driveSubsystem, 0.25), new StopNWait(driveSubsystem, 0.5), 
-        //move straight
-        new Outtake(intakeSubsystem).withTimeout(1));  
-        //lower arm and then dump into bottom port      
+        new AutoMove(driveSubsystem, 0.55), new StopNWait(driveSubsystem, 0.3),
+        //dump powercells
+        new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.3));
   }
 }

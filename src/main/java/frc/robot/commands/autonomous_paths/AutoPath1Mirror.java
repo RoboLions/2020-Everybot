@@ -30,27 +30,16 @@ public class AutoPath1Mirror extends SequentialCommandGroup {
   public AutoPath1Mirror(final DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoMove(driveSubsystem,2.8), new StopNWait(driveSubsystem, 0.5),
+    super(
         //move straight 
-        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
-        //move to target zone and lower arm
-        new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.3),
-        //back up
-        new AutoTurn(driveSubsystem, 180, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //dump and then turn around
-        new AutoMove(driveSubsystem, 2.3), new StopNWait(driveSubsystem, 0.5),
-        //go straight
-        new AutoTurn(driveSubsystem, 80, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //turn right
-        new AutoMove(driveSubsystem, 5.3), new StopNWait(driveSubsystem, 0.5),
+        new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.1),
+        //dump
+        new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.1),
+        //move back
+        new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.1),
+        //turm right
+        new AutoTurn(driveSubsystem, 160), new StopNWait(driveSubsystem, 0.1),
         //move straight
-        new AutoTurn(driveSubsystem, 50, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //enter the trench
-       new AutoMove(driveSubsystem, 1), new StopNWait(driveSubsystem, 0.5),
-        //continue drivng through the trench
-        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.3),  
-        //move arm down
-        new Intake(intakeSubsystem).withTimeout(1)); 
-        //suck powercells
+        new AutoMove(driveSubsystem, 2));
   }
 }

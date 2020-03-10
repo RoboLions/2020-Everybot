@@ -34,26 +34,14 @@ public class AutoPath1 extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super(
         //move straight 
-
         new AutoMove(driveSubsystem, 2.8), new StopNWait(driveSubsystem, 0.1),
+        //dump
         new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.1),
-        //move to target zone and lower arm 
+        //move back
         new AutoMove(driveSubsystem, -0.5), new StopNWait(driveSubsystem, 0.1),
-
-        new AutoTurn(driveSubsystem, 160));
-
-        /*new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //turn left 
-        new AutoMove(driveSubsystem, 6.3), new StopNWait(driveSubsystem, 0.5),
-        //move straight*/
-        /*new AutoTurn(driveSubsystem, -45, 0.6), new StopNWait(driveSubsystem, 0.1),
-        //enter the trench
-        new AutoMoveArm(armSubsystem, Position.GROUND), new StopNWait(driveSubsystem, 0.1),  
-        //move arm down
-        new AutoMove(driveSubsystem, 1), new StopNWait(driveSubsystem, 0.1),
-        //continue drivng through the trench
-        new Intake(intakeSubsystem).withTimeout(1)); */
-        //suck powercells
-
+        //turm right
+        new AutoTurn(driveSubsystem, 160), new StopNWait(driveSubsystem, 0.1),
+        //move straight
+        new AutoMove(driveSubsystem, 2));
   }
 }

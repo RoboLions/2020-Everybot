@@ -31,7 +31,7 @@ public class AutoPath4 extends SequentialCommandGroup {
   public AutoPath4(final DriveSubsystem driveSubsystem, final IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.3), 
+    /*super(new AutoTurn(driveSubsystem, 60, 0.6), new StopNWait(driveSubsystem, 0.3), 
         //turn
         new AutoMove(driveSubsystem, 2.58), new StopNWait(driveSubsystem, 0.3),
         //move straight and then move arm
@@ -42,46 +42,23 @@ public class AutoPath4 extends SequentialCommandGroup {
         new AutoTurn(driveSubsystem, 160), new StopNWait(driveSubsystem, 0.3),
         new AutoMove(driveSubsystem, 4), new AutoMoveArm(armSubsystem, Position.GROUND),
         new AutoTurn(driveSubsystem, 20));
-        //427.5 - 2(8) = 411.5
-        /*
-    super(new AutoMove(driveSubsystem, 2.5), new StopNWait(driveSubsystem, 0.5),
-        //go straight
-        new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //turn right
-        new AutoMove(driveSubsystem, 4.8), new StopNWait(driveSubsystem, 0.5),
-        // move straight to the target zone
-        new AutoTurn(driveSubsystem, -90, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //turn left
-        new AutoMove(driveSubsystem, 0.25), new StopNWait(driveSubsystem, 0.5),
-        //adjust position
-        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
-        //dump balls
-        new AutoMove(driveSubsystem, -0.25), new StopNWait(driveSubsystem, 0.5),
-        //move back
-        new AutoTurn(driveSubsystem, -165, 0.6), new StopNWait(driveSubsystem, 0.5),
-        //make u turn
-        new AutoMove(driveSubsystem, 6.9), new StopNWait(driveSubsystem, 0.5),
-        //move to rendevous
-        new Intake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3),
-        //intake balls
-        new AutoTurn(driveSubsystem, 105, 0.6),new StopNWait(driveSubsystem, 0.5),
-        //turn right
-        new AutoMove(driveSubsystem, 2.75), new StopNWait(driveSubsystem, 0.3),  
+        //427.5 - 2(8) = 411.5*/
+  // Add your commands in the super() call, e.g.
+  //move straight
+    super(new AutoMove(driveSubsystem, 2.3), new StopNWait(driveSubsystem, 0.3),
+      //turn right
+      new AutoTurn(driveSubsystem, 90, 0.6), new StopNWait(driveSubsystem, 0.3), 
         //move straight
-        new AutoTurn(driveSubsystem, -45, 0.6),new StopNWait(driveSubsystem, 0.5),
-        //turn left and face the loading zone
-        new AutoMove(driveSubsystem, 2.5), new StopNWait(driveSubsystem, 0.3),  
+        new AutoMove(driveSubsystem, 3.14), new StopNWait(driveSubsystem, 0.3),
+        //move left
+        new AutoTurn(driveSubsystem, -90), new StopNWait(driveSubsystem, 0.3),
         //move straight
-        new AutoTurn(driveSubsystem, 90, 0.6),new StopNWait(driveSubsystem, 0.5),
-        //turn left and face the loading zone
-        new AutoMove(driveSubsystem, 6.9), new StopNWait(driveSubsystem, 0.5),
-        // move straight to the target zone
-        new AutoTurn(driveSubsystem, -90, 0.6),new StopNWait(driveSubsystem, 0.5),
-        //turn left and face the loading zone
-        new AutoMove(driveSubsystem, 0.25), new StopNWait(driveSubsystem, 0.5),
-        // move straight to the target zone
-        new Outtake(intakeSubsystem).withTimeout(1), new StopNWait(driveSubsystem, 0.3)); 
-        //dump into bottom port and go back    
-        */
+        new AutoMove(driveSubsystem, 0.55), new StopNWait(driveSubsystem, 0.3),
+        //dump powercells
+        new Outtake(intakeSubsystem).withTimeout(1.5), new StopNWait(driveSubsystem, 0.3),
+        //turn right
+        new AutoTurn(driveSubsystem, -170), new StopNWait(driveSubsystem, 0.3),
+        //move straight pass the autoline
+        new AutoMove(driveSubsystem, 5));
   }
 }
